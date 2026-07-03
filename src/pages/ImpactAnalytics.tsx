@@ -33,13 +33,13 @@ export default function ImpactAnalytics() {
         </Badge>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
         {[
           { label: "Projected Economic Impact", value: "₫243.4M", sub: "+31% vs last season" },
           { label: "Water Saved", value: "38.2M m³", sub: "Across 19,600 ha" },
           { label: "Yield Improvement", value: "+1.1 t/ha", sub: "Average across pilot" },
         ].map((s, i) => (
-          <Card key={i}>
+          <Card key={i} hoverEffect>
             <CardContent className="p-6">
               <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">{s.label}</div>
               <div className="text-4xl font-bold tracking-tight text-slate-900 mb-1">{s.value}</div>
@@ -63,9 +63,9 @@ export default function ImpactAnalytics() {
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748B' }} dy={10} />
                   <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748B' }} />
                   <Tooltip 
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    contentStyle={{ borderRadius: '16px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(12px)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                   />
-                  <Bar dataKey="yield" fill="#10B981" radius={[4, 4, 0, 0]} barSize={32} />
+                  <Bar dataKey="yield" fill="#10B981" radius={[6, 6, 0, 0]} barSize={32} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -137,7 +137,7 @@ export default function ImpactAnalytics() {
                 { label: "Adaptation Rate", value: "79%", desc: "of recommended actions" },
                 { label: "CO₂ Reduction (AWD)", value: "18%", desc: "from reduced pumping" },
               ].map((stat, i) => (
-                <div key={i} className="rounded-xl bg-slate-50 border border-slate-100 p-5">
+                <div key={i} className="rounded-xl bg-slate-50 border border-slate-100 p-5 hover:scale-[1.02] transition-transform duration-200">
                   <div className="text-sm font-bold text-slate-900 mb-1">{stat.label}</div>
                   <div className="text-3xl font-bold tracking-tight text-primary">{stat.value}</div>
                   <div className="text-xs text-slate-500 font-medium mt-1 uppercase tracking-wide">{stat.desc}</div>

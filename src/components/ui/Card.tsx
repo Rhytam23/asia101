@@ -2,11 +2,12 @@ import React from 'react';
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
+  hoverEffect?: boolean;
 }
 
-export function Card({ children, className = '', ...props }: CardProps) {
+export function Card({ children, className = '', hoverEffect = false, ...props }: CardProps) {
   return (
-    <div className={`bg-white border border-slate-200 rounded-2xl shadow-sm ${className}`} {...props}>
+    <div className={`bg-white border border-slate-200/60 rounded-2xl shadow-sm transition-all duration-300 ${hoverEffect ? 'hover:-translate-y-1 hover:shadow-md hover:border-slate-300/80' : ''} ${className}`} {...props}>
       {children}
     </div>
   );

@@ -20,11 +20,11 @@ body {
 
 /* Enterprise UI Components */
 .card {
-  @apply bg-white rounded-2xl shadow-card border border-slate-200/60;
+  @apply bg-white rounded-2xl shadow-sm border border-slate-200/60 transition-all duration-300;
 }
 
 .card-elevated {
-  @apply bg-white rounded-2xl shadow-elevated border border-slate-200/70;
+  @apply bg-white rounded-2xl shadow-md border border-slate-200/80 transition-all duration-300;
 }
 
 .section-header {
@@ -62,7 +62,7 @@ body {
 }
 
 .layer-control {
-  @apply bg-white/95 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-sm p-3 text-sm;
+  @apply bg-white/85 backdrop-blur-md border border-white/60 rounded-2xl shadow-lg p-3 text-sm transition-all;
 }
 
 .metric-value {
@@ -127,8 +127,40 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
 .animate-fade-in {
-  animation: fadeInUp 0.3s ease forwards;
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.glass-panel {
+  @apply bg-white/80 backdrop-blur-md border border-white/40 shadow-lg;
 }
 
 /* Professional tables */

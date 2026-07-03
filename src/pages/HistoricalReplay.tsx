@@ -57,9 +57,9 @@ export default function HistoricalReplay() {
         <p className="text-slate-500">Simulating 2016 & 2020 Mekong salinity intrusion events</p>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 animate-fade-in">
         {/* Event Selector */}
-        <div className="xl:col-span-4 flex flex-col h-full">
+        <div className="xl:col-span-4 flex flex-col h-full animate-slide-in-right">
           <Card className="flex-1 flex flex-col">
             <CardHeader className="pb-4 border-none">
               <CardTitle className="text-xs uppercase tracking-widest text-slate-500">Select Historical Event</CardTitle>
@@ -126,7 +126,7 @@ export default function HistoricalReplay() {
               { label: 'Yield Loss', val: selectedEvent.yieldLoss + '%', colors: 'bg-orange-50 border-orange-200', titleColor: 'text-orange-600', valColor: 'text-orange-900' },
               { label: 'Economic Loss', val: (selectedEvent.keyMetrics.economicLoss / 1000) + 'B VND', colors: 'bg-rose-50 border-rose-200', titleColor: 'text-rose-600', valColor: 'text-rose-900' },
             ].map((m, i) => (
-              <Card key={i} className={`${m.colors} shadow-sm transition-all hover:shadow-md`}>
+              <Card key={i} hoverEffect className={`${m.colors}`}>
                 <CardContent className="p-4">
                   <div className={`text-xs font-bold uppercase tracking-wider mb-1 ${m.titleColor}`}>{m.label}</div>
                   <div className={`font-bold text-2xl tracking-tight ${m.valColor}`}>{m.val}</div>

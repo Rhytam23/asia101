@@ -86,7 +86,7 @@ export default function LiveOperations() {
         </Badge>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 animate-fade-in">
         {/* Live Map + Stats */}
         <Card className="xl:col-span-7 flex flex-col">
           <CardHeader className="flex flex-row items-center justify-between pb-4">
@@ -112,14 +112,14 @@ export default function LiveOperations() {
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { label: "Active Farmers Monitored", val: "278,900" },
-                  { label: "Current Alerts", val: "14" },
-                  { label: "SMS Sent Today", val: "3,174" },
-                  { label: "Avg Response Time", val: "41s" },
+                  { label: "Active Farmers Monitored", val: "278,900", color: "text-emerald-700", bg: "bg-emerald-50 border-emerald-100" },
+                  { label: "Current Alerts", val: "14", color: "text-amber-700", bg: "bg-amber-50 border-amber-100" },
+                  { label: "SMS Sent Today", val: "3,174", color: "text-blue-700", bg: "bg-blue-50 border-blue-100" },
+                  { label: "Avg Response Time", val: "41s", color: "text-slate-900", bg: "bg-slate-50 border-slate-100" },
                 ].map((item, idx) => (
-                  <div key={idx} className="bg-slate-50 border border-slate-100 rounded-xl px-4 py-4">
-                    <div className="text-xs font-semibold text-slate-500 mb-1">{item.label}</div>
-                    <div className="font-bold text-2xl text-primary">{item.val}</div>
+                  <div key={idx} className={`rounded-xl px-4 py-4 border transition-all hover:scale-[1.02] ${item.bg}`}>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">{item.label}</div>
+                    <div className={`font-bold text-2xl ${item.color}`}>{item.val}</div>
                   </div>
                 ))}
               </div>
@@ -200,7 +200,7 @@ export default function LiveOperations() {
               <CardContent className="flex-1">
                 <div className="space-y-3 max-h-[400px] overflow-auto pr-2 custom-scrollbar">
                   {alerts.map((alert) => (
-                    <div key={alert.id} className="border border-slate-100 bg-slate-50 rounded-xl p-4">
+                    <div key={alert.id} className="border border-slate-200/60 bg-white shadow-sm hover:shadow-md hover:border-slate-300 transition-all rounded-xl p-4">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <span className="font-bold text-slate-900">{alert.recipient}</span>

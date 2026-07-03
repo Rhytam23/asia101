@@ -183,7 +183,7 @@ export default function SmartMap() {
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col lg:flex-row gap-6">
+      <div className="flex-1 flex flex-col lg:flex-row gap-6 animate-fade-in">
         <div className="flex-1 min-h-[640px] lg:min-h-[680px] relative rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
           <ProfessionalGISMap 
             onLocationSelect={handleLocationSelect}

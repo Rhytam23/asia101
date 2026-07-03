@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Card } from '../ui/Card';
 import { MetricCard, DataBadge } from './shared';
 import { provinces } from '../../data/mockData';
 import { generateRecommendations } from '../../services/decisionEngine';
@@ -657,7 +658,7 @@ export default function GovernmentDashboard() {
           </div>
 
           {/* Subsidy Planning */}
-          <div className="card p-5">
+          <Card hoverEffect className="p-5">
             <div className="font-semibold mb-3 flex items-center gap-2">
               <Award className="w-4 h-4" /> Subsidy Planning
             </div>
@@ -677,10 +678,10 @@ export default function GovernmentDashboard() {
               ))}
             </div>
             <button className="mt-4 w-full text-xs py-2 bg-emerald-700 text-white rounded-2xl hover:bg-emerald-800">PLAN NEW SUBSIDY ROUND</button>
-          </div>
+          </Card>
 
           {/* Infrastructure & Water Allocation */}
-          <div className="card p-5">
+          <Card hoverEffect className="p-5">
             <div className="font-semibold mb-3 flex items-center gap-2">
               <Truck className="w-4 h-4" /> Infrastructure Status
             </div>
@@ -708,7 +709,7 @@ export default function GovernmentDashboard() {
               </div>
               <button onClick={() => toast('Water reallocation request sent to provincial offices')} className="mt-3 w-full text-xs py-1.5 border border-emerald-700 text-emerald-700 rounded-2xl hover:bg-emerald-50">REQUEST REALLOCATION</button>
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* Bottom bar — transparency + actions */}

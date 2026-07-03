@@ -78,7 +78,7 @@ export default function AIDecisionEngine() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 animate-fade-in">
         {/* Recommendations List */}
         <div className="xl:col-span-5 space-y-4">
           <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest px-1">
@@ -89,8 +89,9 @@ export default function AIDecisionEngine() {
             {recommendations.map((rec) => (
               <Card 
                 key={rec.id}
+                hoverEffect
                 onClick={() => setSelectedRec(rec)}
-                className={`cursor-pointer transition-all ${selectedRec?.id === rec.id ? 'border-primary ring-1 ring-primary/20 shadow-md' : 'hover:border-slate-300'}`}
+                className={`cursor-pointer transition-all ${selectedRec?.id === rec.id ? 'border-primary ring-1 ring-primary/20 bg-emerald-50/20' : 'hover:border-slate-300'}`}
               >
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-2">

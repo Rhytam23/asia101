@@ -33,9 +33,9 @@ export default function MissionControl() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 animate-fade-in">
         {/* Live Status */}
-        <Card className="xl:col-span-5">
+        <Card className="xl:col-span-5 border-emerald-100 shadow-emerald-900/5">
           <CardHeader className="flex flex-row items-center justify-between pb-2 border-none">
             <div>
               <CardTitle>Live Operations Status</CardTitle>
@@ -89,7 +89,7 @@ export default function MissionControl() {
         <div className="xl:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           
           <Link to="/ai-engine">
-            <Card className="h-full hover:border-primary/40 transition-colors group cursor-pointer flex flex-col p-6">
+            <Card hoverEffect className="h-full border-slate-200 group cursor-pointer flex flex-col p-6">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-emerald-50 text-emerald-700 rounded-xl">
                   <Activity className="w-6 h-6" />
@@ -104,7 +104,7 @@ export default function MissionControl() {
           {hasRole(['Cooperative', 'Government', 'Research']) && (
             <>
               <Link to="/gis-map">
-                <Card className="h-full hover:border-primary/40 transition-colors group cursor-pointer flex flex-col p-6">
+                <Card hoverEffect className="h-full border-slate-200 group cursor-pointer flex flex-col p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-3 bg-blue-50 text-blue-700 rounded-xl">
                       <MapPin className="w-6 h-6" />
@@ -116,7 +116,7 @@ export default function MissionControl() {
                 </Card>
               </Link>
               <Link to="/historical">
-                <Card className="h-full hover:border-primary/40 transition-colors group cursor-pointer flex flex-col p-6">
+                <Card hoverEffect className="h-full border-slate-200 group cursor-pointer flex flex-col p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-3 bg-amber-50 text-amber-700 rounded-xl">
                       <Clock className="w-6 h-6" />
@@ -144,7 +144,7 @@ export default function MissionControl() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {mockRecommendations.map((rec, idx) => (
-              <Card key={idx} className="flex flex-col justify-between">
+              <Card key={idx} hoverEffect className={`flex flex-col justify-between ${rec.confidence > 90 ? 'border-emerald-200' : 'border-amber-200'}`}>
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-3">
                     <h3 className="font-bold text-slate-900 leading-tight">{rec.title}</h3>
