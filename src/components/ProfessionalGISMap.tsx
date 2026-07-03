@@ -25,6 +25,23 @@ interface ProfessionalGISProps {
 function MapController({ selectedLocation }: { selectedLocation: { lat: number; lng: number } | null }) {
   const map = useMap();
 
+  // Fix white map issue by invalidating size on mount and window resize
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      map.invalidateSize();
+    }, 250);
+    
+    const handleResize = () => {
+      map.invalidateSize();
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [map]);
+
   useEffect(() => {
     if (selectedLocation && map) {
       // Smooth fly animation
