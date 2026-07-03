@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup, LayersControl, LayerGroup, Polygon } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Popup, LayersControl, LayerGroup, Polygon, useMap } from 'react-leaflet';
 import { SatelliteDataPoint, LayerConfig } from '../types';
 import { provinces, currentSatelliteData } from '../data/mockData';
 import 'leaflet/dist/leaflet.css';
@@ -18,6 +18,17 @@ interface GISMapProps {
   showTimeline?: boolean;
   height?: string;
   onPointSelect?: (point: SatelliteDataPoint) => void;
+}
+
+function MapResizer() {
+  const map = useMap();
+  useEffect(() => {
+    const timeout = setTimeout(() => map.invalidateSize(), 250);
+    const handleResize = () => map.invalidateSize();
+    window.addEventListener('resize', handleResize);
+    return () => { clearTimeout(timeout); window.removeEventListener('resize', handleResize); };
+  }, [map]);
+  return null;
 }
 
 const LAYER_CONFIGS: LayerConfig[] = [
@@ -117,6 +128,7 @@ export default function GISMapComponent({ data = currentSatelliteData, showTimel
             attribution='&copy; OpenStreetMap contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+          <MapResizer />
 
           {/* Province boundaries */}
           <LayersControl position="topright">

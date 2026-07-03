@@ -1,5 +1,6 @@
 
-import { MapContainer, TileLayer, CircleMarker, Popup, LayersControl, LayerGroup, Polygon, useMapEvents } from 'react-leaflet';
+import { useEffect } from 'react';
+import { MapContainer, TileLayer, CircleMarker, Popup, LayersControl, LayerGroup, Polygon, useMapEvents, useMap } from 'react-leaflet';
 import { provinces } from '../data/mockData';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -17,6 +18,17 @@ interface EnhancedGISProps {
   selectedLocation?: { lat: number; lng: number } | null;
   activeLayers: string[];
   height?: string;
+}
+
+function MapResizer() {
+  const map = useMap();
+  useEffect(() => {
+    const timeout = setTimeout(() => map.invalidateSize(), 250);
+    const handleResize = () => map.invalidateSize();
+    window.addEventListener('resize', handleResize);
+    return () => { clearTimeout(timeout); window.removeEventListener('resize', handleResize); };
+  }, [map]);
+  return null;
 }
 
 // Map click handler component
@@ -116,6 +128,7 @@ export default function EnhancedGISMap({ onLocationSelect, selectedLocation, act
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <MapResizer />
 
         <MapClickHandler onLocationSelect={onLocationSelect} />
 
