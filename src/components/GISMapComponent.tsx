@@ -116,8 +116,8 @@ export default function GISMapComponent({ data = currentSatelliteData, showTimel
   const activeLayers = layers.filter(l => l.active);
 
   return (
-    <div className="relative">
-      <div className="map-container" style={{ height }}>
+    <div className="relative" style={{ height }}>
+      <div className="map-container h-full">
         <MapContainer 
           center={[10.15, 105.6]} 
           zoom={8.4} 
