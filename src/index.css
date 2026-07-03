@@ -20,11 +20,11 @@ body {
 
 /* Enterprise UI Components */
 .card {
-  @apply bg-white rounded-2xl shadow-sm border border-slate-200/60 transition-all duration-300;
+  @apply bg-gradient-to-br from-emerald-50/60 via-white to-blue-50/40 rounded-2xl shadow-sm border border-emerald-100/60 transition-all duration-300;
 }
 
 .card-elevated {
-  @apply bg-white rounded-2xl shadow-md border border-slate-200/80 transition-all duration-300;
+  @apply bg-gradient-to-br from-emerald-50/80 via-white to-blue-50/50 rounded-2xl shadow-md border border-emerald-200/80 transition-all duration-300;
 }
 
 .section-header {
