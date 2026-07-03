@@ -4,7 +4,7 @@ import { Recommendation } from '../types';
 import { CheckCircle, TrendingUp, ArrowRight } from 'lucide-react';
 import { useDemoMode } from '../context/DemoModeContext';
 import { toast } from 'sonner';
-import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '../components/ui';
+import { Card, CardContent, Button, Badge } from '../components/ui';
 
 export default function AIDecisionEngine() {
   const demo = useDemoMode();

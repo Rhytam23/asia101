@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, Map, Activity, Brain, Clock, BarChart3, 
-  Menu, X, User as UserIcon, LogOut, Settings 
+  Menu, X, LogOut, Settings 
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
