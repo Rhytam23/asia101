@@ -121,15 +121,15 @@ export default function HistoricalReplay() {
           {/* Metrics during replay */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 shrink-0">
             {[
-              { label: 'Peak Salinity', val: selectedEvent.peakSalinity + ' dS/m' },
-              { label: 'Affected Area', val: selectedEvent.keyMetrics.affectedArea.toLocaleString() + ' ha' },
-              { label: 'Yield Loss', val: selectedEvent.yieldLoss + '%' },
-              { label: 'Economic Loss', val: (selectedEvent.keyMetrics.economicLoss / 1000) + 'B VND' },
+              { label: 'Peak Salinity', val: selectedEvent.peakSalinity + ' dS/m', colors: 'bg-red-50 border-red-200', titleColor: 'text-red-600', valColor: 'text-red-900' },
+              { label: 'Affected Area', val: selectedEvent.keyMetrics.affectedArea.toLocaleString() + ' ha', colors: 'bg-amber-50 border-amber-200', titleColor: 'text-amber-600', valColor: 'text-amber-900' },
+              { label: 'Yield Loss', val: selectedEvent.yieldLoss + '%', colors: 'bg-orange-50 border-orange-200', titleColor: 'text-orange-600', valColor: 'text-orange-900' },
+              { label: 'Economic Loss', val: (selectedEvent.keyMetrics.economicLoss / 1000) + 'B VND', colors: 'bg-rose-50 border-rose-200', titleColor: 'text-rose-600', valColor: 'text-rose-900' },
             ].map((m, i) => (
-              <Card key={i}>
+              <Card key={i} className={`${m.colors} shadow-sm transition-all hover:shadow-md`}>
                 <CardContent className="p-4">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">{m.label}</div>
-                  <div className="font-bold text-2xl text-slate-900">{m.val}</div>
+                  <div className={`text-xs font-bold uppercase tracking-wider mb-1 ${m.titleColor}`}>{m.label}</div>
+                  <div className={`font-bold text-2xl tracking-tight ${m.valColor}`}>{m.val}</div>
                 </CardContent>
               </Card>
             ))}
