@@ -85,21 +85,21 @@ export default function GISLocationPanel({
               <div className="font-semibold text-xs uppercase tracking-wider text-slate-500">WEATHER</div>
             </div>
             <div className="grid grid-cols-2 gap-2 mt-1.5">
-              <div className="bg-white border rounded-2xl p-3">
-                <div className="text-xs text-slate-500">Temperature</div>
-                <div className="text-2xl font-semibold">{weather.current.temp}°C</div>
+              <div className="bg-orange-50/80 border border-orange-100 rounded-2xl p-3 transition-colors hover:bg-orange-50">
+                <div className="text-xs font-medium text-orange-600/80 uppercase tracking-wider mb-0.5">Temperature</div>
+                <div className="text-2xl font-semibold text-orange-900">{weather.current.temp}°C</div>
               </div>
-              <div className="bg-white border rounded-2xl p-3">
-                <div className="text-xs text-slate-500">Humidity</div>
-                <div className="text-2xl font-semibold">{weather.current.humidity}%</div>
+              <div className="bg-blue-50/80 border border-blue-100 rounded-2xl p-3 transition-colors hover:bg-blue-50">
+                <div className="text-xs font-medium text-blue-600/80 uppercase tracking-wider mb-0.5">Humidity</div>
+                <div className="text-2xl font-semibold text-blue-900">{weather.current.humidity}%</div>
               </div>
-              <div className="bg-white border rounded-2xl p-3">
-                <div className="text-xs text-slate-500">Wind</div>
-                <div className="text-2xl font-semibold">{weather.current.wind} km/h</div>
+              <div className="bg-teal-50/80 border border-teal-100 rounded-2xl p-3 transition-colors hover:bg-teal-50">
+                <div className="text-xs font-medium text-teal-600/80 uppercase tracking-wider mb-0.5">Wind</div>
+                <div className="text-2xl font-semibold text-teal-900">{weather.current.wind} km/h</div>
               </div>
-              <div className="bg-white border rounded-2xl p-3">
-                <div className="text-xs text-slate-500">Rainfall</div>
-                <div className="text-2xl font-semibold">{weather.current.rainfall} mm</div>
+              <div className="bg-indigo-50/80 border border-indigo-100 rounded-2xl p-3 transition-colors hover:bg-indigo-50">
+                <div className="text-xs font-medium text-indigo-600/80 uppercase tracking-wider mb-0.5">Rainfall</div>
+                <div className="text-2xl font-semibold text-indigo-900">{weather.current.rainfall} mm</div>
               </div>
             </div>
             <div className="text-xs mt-1 text-slate-600">{weather.current.condition}</div>
@@ -111,12 +111,12 @@ export default function GISLocationPanel({
         {soil && (
           <div>
             <div className="font-semibold text-xs uppercase tracking-wider text-slate-500 mb-1">SOIL</div>
-            <div className="bg-white border rounded-2xl p-3 text-sm">
+            <div className="bg-amber-50/80 border border-amber-100 rounded-2xl p-3 text-sm text-amber-900 transition-colors hover:bg-amber-50">
               <div className="grid grid-cols-2 gap-y-1">
-                <div>Type</div><div className="font-medium">{soil.type}</div>
-                <div>pH</div><div className="font-medium">{soil.ph}</div>
-                <div>Salinity</div><div className="font-medium">{soil.salinity} dS/m</div>
-                <div>Organic Matter</div><div className="font-medium">{soil.organicMatter}%</div>
+                <div className="text-amber-700/80">Type</div><div className="font-medium">{soil.type}</div>
+                <div className="text-amber-700/80">pH</div><div className="font-medium">{soil.ph}</div>
+                <div className="text-amber-700/80">Salinity</div><div className="font-medium">{soil.salinity} dS/m</div>
+                <div className="text-amber-700/80">Organic Matter</div><div className="font-medium">{soil.organicMatter}%</div>
               </div>
             </div>
             <MetaBadge source={soil.source} lastUpdated={soil.lastUpdated} confidence={soil.confidence} />
@@ -128,16 +128,16 @@ export default function GISLocationPanel({
           <div>
             <div className="font-semibold text-xs uppercase tracking-wider text-slate-500 mb-1">RISKS &amp; GROUNDWATER</div>
             <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="px-3 py-2 border rounded-2xl bg-white">
+              <div className="px-3 py-2 border border-sky-100 rounded-2xl bg-sky-50/80 text-sky-900 transition-colors hover:bg-sky-50">
                 Flood Risk: <span className="font-semibold text-sky-700">~{Math.round(35 + soil.salinity * 3)}%</span>
               </div>
-              <div className="px-3 py-2 border rounded-2xl bg-white">
+              <div className="px-3 py-2 border border-amber-100 rounded-2xl bg-amber-50/80 text-amber-900 transition-colors hover:bg-amber-50">
                 Drought Risk: <span className="font-semibold text-amber-700">~{Math.round(18 + (100 - weather.current.humidity) / 2)}%</span>
               </div>
-              <div className="px-3 py-2 border rounded-2xl bg-white">
-                Groundwater: <span className="font-semibold">{(1.35 + ((lat || 10) * 0.11) % 1.65).toFixed(1)}m</span>
+              <div className="px-3 py-2 border border-cyan-100 rounded-2xl bg-cyan-50/80 text-cyan-900 transition-colors hover:bg-cyan-50">
+                Groundwater: <span className="font-semibold text-cyan-700">{(1.35 + ((lat || 10) * 0.11) % 1.65).toFixed(1)}m</span>
               </div>
-              <div className="px-3 py-2 border rounded-2xl bg-white">
+              <div className="px-3 py-2 border border-red-100 rounded-2xl bg-red-50/80 text-red-900 transition-colors hover:bg-red-50">
                 Salinity Intrusion: <span className="font-semibold text-red-700">{Math.round(soil.salinity * 8)}%</span>
               </div>
             </div>
@@ -160,14 +160,14 @@ export default function GISLocationPanel({
           <div>
             <div className="font-semibold text-xs uppercase tracking-wider text-slate-500 mb-1">MARKET PRICES</div>
             <div className="grid grid-cols-3 gap-2 text-xs">
-              <div className="bg-white border rounded-2xl p-2">
-                Rice<br /><span className="font-semibold">{market.ricePrice.toLocaleString()}</span> VND/kg
+              <div className="bg-emerald-50/80 border border-emerald-100 rounded-2xl p-2 text-emerald-900 transition-colors hover:bg-emerald-50">
+                <span className="text-emerald-700/80">Rice</span><br /><span className="font-semibold text-sm">{market.ricePrice.toLocaleString()}</span> <span className="text-[10px]">VND</span>
               </div>
-              <div className="bg-white border rounded-2xl p-2">
-                Shrimp<br /><span className="font-semibold">{market.shrimpPrice.toLocaleString()}</span>
+              <div className="bg-rose-50/80 border border-rose-100 rounded-2xl p-2 text-rose-900 transition-colors hover:bg-rose-50">
+                <span className="text-rose-700/80">Shrimp</span><br /><span className="font-semibold text-sm">{market.shrimpPrice.toLocaleString()}</span>
               </div>
-              <div className="bg-white border rounded-2xl p-2">
-                Vegetables<br /><span className="font-semibold">{market.vegetablePrice.toLocaleString()}</span>
+              <div className="bg-lime-50/80 border border-lime-100 rounded-2xl p-2 text-lime-900 transition-colors hover:bg-lime-50">
+                <span className="text-lime-700/80">Veg.</span><br /><span className="font-semibold text-sm">{market.vegetablePrice.toLocaleString()}</span>
               </div>
             </div>
             <div className="text-xs mt-1 text-emerald-700 font-medium">{market.trend}</div>
@@ -179,7 +179,7 @@ export default function GISLocationPanel({
         {government && (
           <div>
             <div className="font-semibold text-xs uppercase tracking-wider text-slate-500 mb-1">GOVERNMENT PROGRAMS</div>
-            <div className="text-xs bg-white border rounded-2xl p-3 space-y-1">
+            <div className="text-xs bg-violet-50/80 border border-violet-100 rounded-2xl p-3 space-y-1 text-violet-900 transition-colors hover:bg-violet-50">
               {government.programs.map((p, i) => <div key={i}>• {p}</div>)}
               {government.alerts.length > 0 && (
                 <div className="pt-1 border-t text-amber-700">Alerts: {government.alerts.join(', ')}</div>
