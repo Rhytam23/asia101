@@ -3,6 +3,7 @@ import { historicalEvents, getHistoricalTimeSeries } from '../data/mockData';
 import { HistoricalEvent } from '../types';
 import GISMapComponent from '../components/GISMapComponent';
 import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '../components/ui';
 
 export default function HistoricalReplay() {
   const [selectedEvent, setSelectedEvent] = useState<HistoricalEvent>(historicalEvents[0]);
@@ -50,88 +51,103 @@ export default function HistoricalReplay() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
-      <div className="mb-7">
-        <div className="font-semibold text-4xl tracking-tighter">Historical Replay</div>
-        <div className="text-xl text-slate-500">Simulating 2016 &amp; 2020 Mekong salinity intrusion events</div>
+    <div className="space-y-8">
+      <div>
+        <h1 className="font-bold text-3xl tracking-tight text-slate-900 mb-2">Historical Replay</h1>
+        <p className="text-slate-500">Simulating 2016 & 2020 Mekong salinity intrusion events</p>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         {/* Event Selector */}
-        <div className="xl:col-span-4 card p-6">
-          <div className="font-semibold tracking-tight mb-5">SELECT HISTORICAL EVENT</div>
+        <div className="xl:col-span-4 flex flex-col h-full">
+          <Card className="flex-1 flex flex-col">
+            <CardHeader className="pb-4 border-none">
+              <CardTitle className="text-xs uppercase tracking-widest text-slate-500">Select Historical Event</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col gap-4">
+              {historicalEvents.map((event) => (
+                <div 
+                  key={event.id}
+                  onClick={() => loadEvent(event)}
+                  className={`border rounded-2xl p-5 cursor-pointer transition-all ${selectedEvent.id === event.id ? 'border-primary ring-1 ring-primary/20 bg-emerald-50/30' : 'hover:border-slate-300 bg-white'}`}
+                >
+                  <div className="flex items-baseline gap-3 mb-1">
+                    <h3 className="font-bold text-2xl text-slate-900">{event.year}</h3>
+                    <Badge variant="red">{event.yieldLoss}% yield loss</Badge>
+                  </div>
+                  <h4 className="font-bold tracking-tight text-slate-800 mb-2">{event.name}</h4>
+                  <p className="text-sm leading-relaxed text-slate-600 mb-4">{event.description}</p>
 
-          {historicalEvents.map((event) => (
-            <div 
-              key={event.id}
-              onClick={() => loadEvent(event)}
-              className={`border rounded-2xl p-5 mb-3 cursor-pointer transition ${selectedEvent.id === event.id ? 'border-emerald-600 ring-1 ring-emerald-300' : 'hover:border-slate-300'}`}
-            >
-              <div className="flex items-baseline gap-2">
-                <div className="font-semibold text-xl">{event.year}</div>
-                <div className="text-xs px-2 py-px bg-red-100 text-red-700 rounded">{event.yieldLoss}% yield loss</div>
+                  <div className="text-xs font-medium flex justify-between pt-4 border-t border-slate-100">
+                    <div className="text-slate-500">Peak salinity: <span className="font-bold text-slate-900">{event.peakSalinity} dS/m</span></div>
+                    <div className="text-slate-500">{event.affectedProvinces.length} provinces</div>
+                  </div>
+                </div>
+              ))}
+              <div className="mt-auto pt-4 text-xs text-center text-slate-400 font-medium">
+                Data derived from MONRE ground truth + Sentinel historical archives.
               </div>
-              <div className="font-semibold tracking-tight mt-px mb-1">{event.name}</div>
-              <div className="text-sm leading-tight text-slate-600">{event.description}</div>
-
-              <div className="mt-4 text-xs flex justify-between">
-                <div>Peak salinity: <span className="font-semibold">{event.peakSalinity} dS/m</span></div>
-                <div className="font-medium">{event.affectedProvinces.length} provinces</div>
-              </div>
-            </div>
-          ))}
-
-          <div className="text-xs px-2 py-2 text-slate-500 mt-1">
-            Data derived from MONRE ground truth + Sentinel historical archives.
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Replay Map + Controls */}
-        <div className="xl:col-span-8">
-          <div className="card overflow-hidden">
-            <div className="px-6 pt-5 pb-3 flex items-center justify-between bg-white">
-              <div>
-                <span className="font-semibold">Playback: </span> 
-                <span className="font-semibold text-red-700">{playbackYear}</span> — {selectedEvent.name}
+        <div className="xl:col-span-8 flex flex-col h-full gap-6">
+          <Card className="flex-1 flex flex-col overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between pb-3 bg-white z-10 border-b border-slate-100">
+              <div className="text-sm">
+                <span className="font-bold text-slate-900">Playback: </span> 
+                <span className="font-bold text-red-600">{playbackYear}</span> <span className="text-slate-500">— {selectedEvent.name}</span>
               </div>
               <div className="flex items-center gap-2">
-                <button onClick={togglePlayback} className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-2xl bg-slate-900 text-white">
+                <Button onClick={togglePlayback} size="sm" className="gap-2">
                   {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   {isPlaying ? 'PAUSE REPLAY' : 'PLAY CRISIS TIMELINE'}
-                </button>
-                <button onClick={resetSimulation} className="p-2 rounded-2xl border hover:bg-white"><RotateCcw className="w-4 h-4" /></button>
+                </Button>
+                <Button variant="outline" size="sm" onClick={resetSimulation} className="px-3">
+                  <RotateCcw className="w-4 h-4" />
+                </Button>
               </div>
+            </CardHeader>
+            <div className="flex-1 min-h-[430px]">
+              <GISMapComponent 
+                data={currentSimData} 
+                showTimeline={false} 
+                height="100%" 
+              />
             </div>
-            
-            <GISMapComponent 
-              data={currentSimData} 
-              showTimeline={false} 
-              height="430px" 
-            />
-          </div>
+          </Card>
 
           {/* Metrics during replay */}
-          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 shrink-0">
             {[
               { label: 'Peak Salinity', val: selectedEvent.peakSalinity + ' dS/m' },
               { label: 'Affected Area', val: selectedEvent.keyMetrics.affectedArea.toLocaleString() + ' ha' },
               { label: 'Yield Loss', val: selectedEvent.yieldLoss + '%' },
               { label: 'Economic Loss', val: (selectedEvent.keyMetrics.economicLoss / 1000) + 'B VND' },
             ].map((m, i) => (
-              <div key={i} className="bg-white border rounded-2xl px-5 py-4 text-sm">
-                <div className="text-xs text-slate-500">{m.label}</div>
-                <div className="font-semibold text-2xl tracking-tighter mt-1">{m.val}</div>
-              </div>
+              <Card key={i}>
+                <CardContent className="p-4">
+                  <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">{m.label}</div>
+                  <div className="font-bold text-2xl text-slate-900">{m.val}</div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="mt-7 card p-6 text-sm">
-        <div className="font-semibold mb-2">Key Insights from {selectedEvent.year}</div>
-        <div className="text-slate-600">This event is now used as training data for our salinity prediction model. The current 2026 system has learned to detect similar patterns 14–19 days earlier than the 2020 response.</div>
-        <div className="mt-3 text-xs text-emerald-700 font-medium">Validated with: Sentinel-2, MONRE field stations, CHIRPS rainfall</div>
-      </div>
+      <Card className="bg-emerald-50 border-emerald-100">
+        <CardContent className="p-6">
+          <h4 className="font-bold text-emerald-900 mb-2">Key Insights from {selectedEvent.year}</h4>
+          <p className="text-emerald-800 text-sm leading-relaxed mb-4">
+            This event is now used as training data for our salinity prediction model. The current 2026 system has learned to detect similar patterns 14–19 days earlier than the 2020 response.
+          </p>
+          <div className="text-xs font-bold text-emerald-700 tracking-wide">
+            VALIDATED WITH: SENTINEL-2, MONRE FIELD STATIONS, CHIRPS RAINFALL
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

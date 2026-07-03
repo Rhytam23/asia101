@@ -1,13 +1,15 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/shared/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
+import SignUp from './pages/SignUp';
+import Profile from './pages/Profile';
 import MissionControl from './pages/MissionControl';
 import LiveOperations from './pages/LiveOperations';
 import SmartMap from './pages/SmartMap';
 import AIDecisionEngine from './pages/AIDecisionEngine';
 import HistoricalReplay from './pages/HistoricalReplay';
 import ImpactAnalytics from './pages/ImpactAnalytics';
-import Architecture from './pages/Architecture';
-import Documentation from './pages/Documentation';
 import RoleDashboards from './pages/RoleDashboards';
 import Layout from './layouts/MainLayout';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -16,32 +18,68 @@ import DemoModeSelector from './components/DemoModeSelector';
 
 function App() {
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen bg-slate-50 font-sans">
       <ErrorBoundary>
-        <DemoModeProvider>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
+        <AuthProvider>
+          <DemoModeProvider>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/signup" element={<SignUp />} />
+              
+              {/* Protected Routes for All Authenticated Users */}
+              <Route path="/mission-control" element={
+                <ProtectedRoute>
+                  <Layout><MissionControl /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/live-ops" element={
+                <ProtectedRoute>
+                  <Layout><LiveOperations /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/ai-engine" element={
+                <ProtectedRoute>
+                  <Layout><AIDecisionEngine /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Layout><Profile /></Layout>
+                </ProtectedRoute>
+              } />
+
+              {/* Protected Routes (Hidden from Farmers) */}
+              <Route path="/gis-map" element={
+                <ProtectedRoute allowedRoles={['Cooperative', 'Government', 'Research']}>
+                  <Layout><SmartMap /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/historical" element={
+                <ProtectedRoute allowedRoles={['Cooperative', 'Government', 'Research']}>
+                  <Layout><HistoricalReplay /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/analytics" element={
+                <ProtectedRoute allowedRoles={['Cooperative', 'Government', 'Research']}>
+                  <Layout><ImpactAnalytics /></Layout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Legacy Dashboards / Catch-all */}
+              <Route path="/dashboards/*" element={
+                <ProtectedRoute>
+                  <Layout><RoleDashboards /></Layout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
             
-            <Route path="/mission-control" element={<Layout><MissionControl /></Layout>} />
-            <Route path="/live-ops" element={<Layout><LiveOperations /></Layout>} />
-            <Route path="/gis-map" element={<Layout><SmartMap /></Layout>} />
-            <Route path="/ai-engine" element={<Layout><AIDecisionEngine /></Layout>} />
-            <Route path="/historical" element={<Layout><HistoricalReplay /></Layout>} />
-            <Route path="/analytics" element={<Layout><ImpactAnalytics /></Layout>} />
-            <Route path="/architecture" element={<Layout><Architecture /></Layout>} />
-            <Route path="/docs" element={<Layout><Documentation /></Layout>} />
-            
-            {/* Unified Role Dashboards - switch without reload */}
-            <Route path="/dashboards" element={<Layout><RoleDashboards /></Layout>} />
-            <Route path="/dashboards/farmer" element={<Layout><RoleDashboards /></Layout>} />
-            <Route path="/dashboards/cooperative" element={<Layout><RoleDashboards /></Layout>} />
-            <Route path="/dashboards/government" element={<Layout><RoleDashboards /></Layout>} />
-            <Route path="/dashboards/researcher" element={<Layout><RoleDashboards /></Layout>} />
-          </Routes>
-          
-          {/* Global Demo Mode UI - non-intrusive, always available for presentations */}
-          <DemoModeSelector />
-        </DemoModeProvider>
+            {/* Global Demo Mode UI */}
+            <DemoModeSelector />
+          </DemoModeProvider>
+        </AuthProvider>
       </ErrorBoundary>
     </div>
   );

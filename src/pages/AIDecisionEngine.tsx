@@ -4,6 +4,7 @@ import { Recommendation } from '../types';
 import { CheckCircle, TrendingUp, ArrowRight } from 'lucide-react';
 import { useDemoMode } from '../context/DemoModeContext';
 import { toast } from 'sonner';
+import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '../components/ui';
 
 export default function AIDecisionEngine() {
   const demo = useDemoMode();
@@ -34,7 +35,6 @@ export default function AIDecisionEngine() {
   const regenerateRecommendations = () => {
     setIsGenerating(true);
     setTimeout(() => {
-      // DEMONSTRATION: deterministic variation for stable demo
       const shuffled = [...mockRecommendations].map((r, i) => {
         const seed = (Date.now() + i) % 11;
         return {
@@ -57,147 +57,153 @@ export default function AIDecisionEngine() {
       description: `Action queued. SMS will be sent to registered farmers.`,
       duration: 4000,
     });
-    // Simulate state update
     setRecommendations(prev => prev.map(r => r.id === rec.id ? { ...r, title: '✓ ' + r.title } : r));
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
-      <div className="flex items-center justify-between mb-7">
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <div className="font-semibold text-4xl tracking-tighter">AI Decision Engine</div>
-          <div className="text-xl text-slate-500">Explainable multi-objective recommendations</div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 mb-2">AI Decision Engine</h1>
+          <p className="text-slate-500">Explainable multi-objective recommendations</p>
         </div>
-        <button 
+        <Button 
+          variant="outline" 
           onClick={regenerateRecommendations}
           disabled={isGenerating}
-          className="px-6 py-2.5 flex items-center gap-2 text-sm bg-white border font-medium rounded-2xl hover:bg-slate-50 disabled:opacity-60"
+          className="gap-2"
         >
           {isGenerating ? 'REGENERATING...' : 'REGENERATE RECOMMENDATIONS'} 
           <TrendingUp className="w-4 h-4" />
-        </button>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         {/* Recommendations List */}
-        <div className="xl:col-span-5">
-          <div className="mb-3 px-1 flex justify-between items-center">
-            <div className="uppercase tracking-[1px] text-xs font-semibold text-slate-500">PRIORITIZED ACTIONS • {recommendations.length}</div>
+        <div className="xl:col-span-5 space-y-4">
+          <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest px-1">
+            PRIORITIZED ACTIONS • {recommendations.length}
           </div>
           
           <div className="space-y-3">
             {recommendations.map((rec) => (
-              <div 
+              <Card 
                 key={rec.id}
                 onClick={() => setSelectedRec(rec)}
-                className={`recommendation-card cursor-pointer border ${selectedRec?.id === rec.id ? 'border-emerald-500 ring-1 ring-emerald-200' : 'border-slate-200'}`}
+                className={`cursor-pointer transition-all ${selectedRec?.id === rec.id ? 'border-primary ring-1 ring-primary/20 shadow-md' : 'hover:border-slate-300'}`}
               >
-                <div className="flex items-center justify-between mb-1">
-                  <div className="font-semibold text-lg tracking-tight pr-4">{rec.title}</div>
-                  <div className={`text-xs font-semibold px-3 py-1 rounded-full ${rec.confidence >= 90 ? 'bg-emerald-600 text-white' : 'bg-amber-500 text-white'}`}>
-                    {rec.confidence}%
+                <CardContent className="p-5">
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-bold text-slate-900 pr-4 leading-tight">{rec.title}</h3>
+                    <Badge variant={rec.confidence >= 90 ? 'emerald' : 'amber'}>{rec.confidence}%</Badge>
                   </div>
-                </div>
 
-                <div className="text-sm text-slate-600 line-clamp-2 mb-4">{rec.predictedOutcome}</div>
+                  <p className="text-sm text-slate-600 line-clamp-2 mb-4">{rec.predictedOutcome}</p>
 
-                <div className="flex items-center justify-between text-xs font-medium">
-                  <div className="flex gap-6">
-                    <div><span className="text-emerald-600">+{rec.expectedYield}</span> t/ha</div>
-                    <div><span className="text-blue-600">{rec.waterSavings}%</span> water</div>
+                  <div className="flex items-center justify-between text-xs font-bold">
+                    <div className="flex gap-4">
+                      <div><span className="text-primary">+{rec.expectedYield}</span> t/ha</div>
+                      <div><span className="text-blue-600">{rec.waterSavings}%</span> water</div>
+                    </div>
+                    <div className={rec.priority === 'high' ? 'text-red-600' : 'text-amber-600'}>
+                      {rec.priority.toUpperCase()}
+                    </div>
                   </div>
-                  <div className={`text-xs font-semibold ${rec.priority === 'high' ? 'text-red-600' : 'text-amber-600'}`}>{rec.priority.toUpperCase()}</div>
-                </div>
 
-                {/* Trust micro line */}
-                <div className="mt-2 text-[10px] flex gap-3 text-slate-500">
-                  <span>{rec.confidence}% confidence</span>
-                  {rec.uncertainty && <span>±{rec.uncertainty}% uncertainty</span>}
-                  {rec.confidence < 70 && <span className="text-amber-600 font-medium">⚠ Verify locally</span>}
-                </div>
-              </div>
+                  <div className="mt-3 text-[10px] flex gap-3 text-slate-500 font-medium">
+                    <span>{rec.confidence}% confidence</span>
+                    {rec.uncertainty && <span>±{rec.uncertainty}% uncertainty</span>}
+                    {rec.confidence < 70 && <span className="text-amber-600">⚠ Verify locally</span>}
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
 
-          <div className="text-xs px-1 mt-5 text-slate-500">All recommendations are explainable. Click any to inspect reasoning.</div>
+          <div className="text-xs px-1 text-slate-500">All recommendations are explainable. Click any to inspect reasoning.</div>
         </div>
 
         {/* Detailed Explainable Panel */}
         <div className="xl:col-span-7">
           {selectedRec && (
-            <div className="card p-7">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="uppercase text-xs font-bold text-emerald-600 tracking-widest">EXPLAINABLE RECOMMENDATION</div>
-                  <div className="text-3xl font-semibold tracking-tighter mt-1 pr-6 leading-none">{selectedRec.title}</div>
-                </div>
-                <div>
-                  <div className="px-4 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">{selectedRec.confidence}% CONFIDENCE</div>
-                  <div className="text-right mt-0.5 text-xs text-red-600">{selectedRec.uncertainty}% uncertainty</div>
-                </div>
-              </div>
-
-              <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-                {[
-                  { label: 'Expected Yield', value: `${selectedRec.expectedYield} t/ha`, color: 'emerald' },
-                  { label: 'Income Uplift', value: `${selectedRec.expectedIncome}M VND`, color: 'emerald' },
-                  { label: 'Water Savings', value: `${selectedRec.waterSavings}%`, color: 'blue' },
-                  { label: 'Priority', value: selectedRec.priority.toUpperCase(), color: selectedRec.priority === 'high' ? 'red' : 'amber' },
-                ].map((item, i) => (
-                  <div key={i} className="rounded-2xl border px-4 py-[13px]">
-                    <div className="text-xs text-slate-500">{item.label}</div>
-                    <div className={`text-xl font-semibold mt-px text-${item.color}-700`}>{item.value}</div>
+            <Card className="h-full">
+              <CardContent className="p-8">
+                <div className="flex justify-between items-start mb-8">
+                  <div>
+                    <div className="uppercase text-xs font-bold text-primary tracking-widest mb-2">EXPLAINABLE RECOMMENDATION</div>
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 leading-tight pr-6">{selectedRec.title}</h2>
                   </div>
-                ))}
-              </div>
+                  <div className="text-right shrink-0">
+                    <Badge variant="emerald" className="mb-1">{selectedRec.confidence}% CONFIDENCE</Badge>
+                    <div className="text-xs font-semibold text-red-600">{selectedRec.uncertainty}% uncertainty</div>
+                  </div>
+                </div>
 
-              {/* Reasoning */}
-              <div className="mt-7">
-                <div className="uppercase text-xs tracking-wider font-semibold mb-2 text-slate-500">REASONING</div>
-                <div className="space-y-[9px]">
-                  {selectedRec.reasoning.map((reason, i) => (
-                    <div key={i} className="flex gap-3 text-[14.5px]">
-                      <div className="w-5 h-5 flex-shrink-0 mt-px"><CheckCircle className="w-4 h-4 text-emerald-600" /></div>
-                      <div className="leading-snug">{reason}</div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                  {[
+                    { label: 'Expected Yield', value: `${selectedRec.expectedYield} t/ha`, color: 'text-primary' },
+                    { label: 'Income Uplift', value: `${selectedRec.expectedIncome}M VND`, color: 'text-primary' },
+                    { label: 'Water Savings', value: `${selectedRec.waterSavings}%`, color: 'text-blue-600' },
+                    { label: 'Priority', value: selectedRec.priority.toUpperCase(), color: selectedRec.priority === 'high' ? 'text-red-600' : 'text-amber-600' },
+                  ].map((item, i) => (
+                    <div key={i} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                      <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1">{item.label}</div>
+                      <div className={`text-xl font-bold ${item.color}`}>{item.value}</div>
                     </div>
                   ))}
                 </div>
-              </div>
 
-              {/* Supporting Datasets */}
-              <div className="mt-7">
-                <div className="uppercase text-xs tracking-wider font-semibold mb-3 text-slate-500">SUPPORTING DATASETS</div>
-                <div className="flex flex-wrap gap-2">
-                  {selectedRec.supportingDatasets.map((ds, i) => (
-                    <div key={i} className="data-source px-4 py-1">{ds}</div>
-                  ))}
+                {/* Reasoning */}
+                <div className="mb-8">
+                  <div className="uppercase text-xs tracking-wider font-bold mb-3 text-slate-900">REASONING</div>
+                  <div className="space-y-3">
+                    {selectedRec.reasoning.map((reason, i) => (
+                      <div key={i} className="flex gap-3 text-sm text-slate-700">
+                        <CheckCircle className="w-5 h-5 text-primary shrink-0" />
+                        <div className="leading-relaxed">{reason}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Expected Outcome */}
-              <div className="mt-7 p-4 bg-emerald-50/70 border-emerald-200 border rounded-2xl text-sm">
-                <div className="text-emerald-800 font-medium mb-0.5">PREDICTED OUTCOME</div>
-                {selectedRec.predictedOutcome}
-              </div>
+                {/* Supporting Datasets */}
+                <div className="mb-8">
+                  <div className="uppercase text-xs tracking-wider font-bold mb-3 text-slate-900">SUPPORTING DATASETS</div>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedRec.supportingDatasets.map((ds, i) => (
+                      <Badge key={i} variant="slate">{ds}</Badge>
+                    ))}
+                  </div>
+                </div>
 
-              {/* Action + SMS */}
-              <div className="flex items-center gap-3 mt-6">
-                <button 
-                  onClick={() => applyRecommendation(selectedRec)}
-                  className="flex-1 bg-primary hover:bg-emerald-900 text-white font-semibold py-[13px] rounded-2xl text-sm transition flex items-center justify-center gap-2"
-                >
-                  APPLY RECOMMENDATION <ArrowRight className="w-4 h-4" />
-                </button>
-                <button 
-                  onClick={() => window.location.href = '/live-ops'} 
-                  className="flex-1 border border-emerald-200 hover:bg-emerald-50 font-semibold py-[13px] rounded-2xl text-sm text-emerald-700"
-                >
-                  PREVIEW SMS ALERT
-                </button>
-              </div>
+                {/* Expected Outcome */}
+                <div className="mb-8 p-4 bg-emerald-50 border-emerald-100 border rounded-xl text-sm">
+                  <div className="text-emerald-900 font-bold mb-1">PREDICTED OUTCOME</div>
+                  <div className="text-emerald-800">{selectedRec.predictedOutcome}</div>
+                </div>
 
-              <div className="mt-2 text-xs text-center text-slate-500">All predictions include 95% confidence intervals. Validated against 2020 event dataset.</div>
-            </div>
+                {/* Action + SMS */}
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  <Button 
+                    onClick={() => applyRecommendation(selectedRec)}
+                    className="w-full sm:w-auto flex-1 gap-2 py-3"
+                  >
+                    APPLY RECOMMENDATION <ArrowRight className="w-4 h-4" />
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => window.location.href = '/live-ops'} 
+                    className="w-full sm:w-auto flex-1 py-3"
+                  >
+                    PREVIEW SMS ALERT
+                  </Button>
+                </div>
+
+                <div className="mt-4 text-xs text-center text-slate-400 font-medium">
+                  All predictions include 95% confidence intervals. Validated against 2020 event dataset.
+                </div>
+              </CardContent>
+            </Card>
           )}
         </div>
       </div>

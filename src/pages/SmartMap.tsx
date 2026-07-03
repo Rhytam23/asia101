@@ -11,6 +11,7 @@ import { Search, MapPin, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import { LocationPanelSkeleton } from '../components/shared/LoadingStates';
 import { useDemoMode } from '../context/DemoModeContext';
+import { Button, Badge } from '../components/ui';
 
 export default function SmartMap() {
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -140,52 +141,50 @@ export default function SmartMap() {
       : 'Selected Location';
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
-      <div className="border-b bg-white z-50">
-        <div className="max-w-[1520px] mx-auto px-6 py-4 flex items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary rounded-2xl flex items-center justify-center">
-              <MapPin className="text-white w-4 h-4" />
+    <div className="flex flex-col min-h-[calc(100vh-4rem)]">
+      {/* Integrated Search Bar inside layout instead of edge-to-edge */}
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm mb-6 p-4">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+              <MapPin className="text-white w-5 h-5" />
             </div>
             <div>
-              <div className="font-semibold tracking-tighter text-3xl text-primary">MEKONG GIS</div>
-              <div className="text-[10px] text-emerald-700 -mt-1 font-medium">PROFESSIONAL SATELLITE INTELLIGENCE</div>
+              <div className="font-bold tracking-tight text-xl text-slate-900 leading-tight">GIS Mapping</div>
+              <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Satellite Intelligence</div>
             </div>
           </div>
 
-          <div className="flex-1 max-w-md ml-2">
-            <div className="relative">
-              <input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="Search province, district, commune or lat,lng"
-                className="w-full border pl-10 py-2.5 text-sm rounded-3xl focus:outline-none focus:ring-1 focus:ring-emerald-700"
-              />
-              <Search className="absolute left-3.5 top-3 text-slate-400 w-4 h-4" />
-              <button 
-                onClick={handleSearch} 
-                disabled={isSearching || !searchQuery.trim()}
-                className="absolute right-1.5 top-1.5 text-xs bg-primary text-white px-5 py-[5px] rounded-3xl font-medium disabled:opacity-60"
-              >
-                {isSearching ? 'SEARCHING...' : 'SEARCH'}
-              </button>
-            </div>
+          <div className="flex-1 w-full max-w-xl mx-auto relative">
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              placeholder="Search province, district, commune or lat,lng"
+              className="w-full bg-slate-50 border border-slate-200 pl-11 pr-24 py-3 text-sm rounded-xl focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
+            />
+            <Search className="absolute left-4 top-3.5 text-slate-400 w-4 h-4" />
+            <Button 
+              size="sm"
+              onClick={handleSearch} 
+              disabled={isSearching || !searchQuery.trim()}
+              className="absolute right-1.5 top-1.5 bottom-1.5 rounded-lg px-4"
+            >
+              {isSearching ? '...' : 'SEARCH'}
+            </Button>
           </div>
 
-          <div className="flex items-center gap-2 ml-auto">
-            <button onClick={resetMap} className="flex items-center gap-1.5 text-sm px-4 py-2 border rounded-2xl hover:bg-white">
-              <RefreshCw className="w-3.5 h-3.5" /> Reset
-            </button>
-            <div className="text-xs px-4 py-2 rounded-2xl bg-emerald-50 text-emerald-800 font-medium">
-              {demo.isDemoMode ? 'DEMO SCENARIO ACTIVE' : 'Map click triggers full analysis'}
-            </div>
+          <div className="flex items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0 justify-end">
+            <Button variant="outline" size="sm" onClick={resetMap} className="gap-2 h-10">
+              <RefreshCw className="w-4 h-4" /> Reset Map
+            </Button>
+            {demo.isDemoMode && <Badge variant="emerald" className="h-10 px-3">DEMO SCENARIO</Badge>}
           </div>
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col lg:flex-row max-w-[1520px] mx-auto w-full px-4 pt-4 gap-4">
-        <div className="flex-1 min-h-[640px] lg:min-h-[680px] relative">
+      <div className="flex-1 flex flex-col lg:flex-row gap-6">
+        <div className="flex-1 min-h-[640px] lg:min-h-[680px] relative rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
           <ProfessionalGISMap 
             onLocationSelect={handleLocationSelect}
             selectedLocation={selectedLocation}
@@ -193,58 +192,60 @@ export default function SmartMap() {
           />
         </div>
 
-        <div className="lg:w-[400px] xl:w-[430px] flex-shrink-0">
+        <div className="lg:w-[420px] flex-shrink-0">
           {locationData.loading ? (
             <LocationPanelSkeleton />
           ) : (
-            <GISLocationPanel 
-              lat={effectiveLat}
-              lng={effectiveLng}
-              admin={locationData.admin}
-              weather={locationData.weather}
-              soil={locationData.soil}
-              crop={locationData.crop}
-              market={locationData.market}
-              government={locationData.government}
-              loading={locationData.loading}
-              onApply={(action) => {
-                if (action === 'recommend' && recommendations.length) {
-                  window.scrollTo({ top: 900, behavior: 'smooth' });
-                } else {
-                  toast(demo.isDemoMode ? 'DEMO: SMS alert would be sent' : 'SMS alert dispatched');
-                }
-              }}
-            />
+            <div className="h-full bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+              <GISLocationPanel 
+                lat={effectiveLat}
+                lng={effectiveLng}
+                admin={locationData.admin}
+                weather={locationData.weather}
+                soil={locationData.soil}
+                crop={locationData.crop}
+                market={locationData.market}
+                government={locationData.government}
+                loading={locationData.loading}
+                onApply={(action) => {
+                  if (action === 'recommend' && recommendations.length) {
+                    window.scrollTo({ top: 900, behavior: 'smooth' });
+                  } else {
+                    toast(demo.isDemoMode ? 'DEMO: SMS alert would be sent' : 'SMS alert dispatched');
+                  }
+                }}
+              />
+            </div>
           )}
         </div>
       </div>
 
-      {/* Decision Intelligence Engine Section — appears automatically */}
-      <div className="max-w-[1520px] mx-auto w-full px-4 pt-4 pb-8">
-        <DecisionIntelligence 
-          recommendations={recommendations} 
-          locationName={locationName}
-          loading={locationData.loading}
-        />
+      {/* Decision Intelligence Engine Section */}
+      <div className="pt-8 pb-8">
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          <DecisionIntelligence 
+            recommendations={recommendations} 
+            locationName={locationName}
+            loading={locationData.loading}
+          />
+        </div>
 
-        {/* Economic Decision Module — live comparison with charts */}
+        {/* Economic Decision Module */}
         {recsForEconomic.length > 0 && inputForEconomic && (
-          <div className="mt-6">
-            <EconomicDecision
-              lat={selectedLocation?.lat ?? null}
-              lng={selectedLocation?.lng ?? null}
-              currentCrop={locationData.crop}
-              recommended={recsForEconomic[0]}
-              input={inputForEconomic}
-            />
+          <div className="mt-8">
+            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+              <EconomicDecision
+                lat={selectedLocation?.lat ?? null}
+                lng={selectedLocation?.lng ?? null}
+                currentCrop={locationData.crop}
+                recommended={recsForEconomic[0]}
+                input={inputForEconomic}
+              />
+            </div>
           </div>
         )}
       </div>
 
-      <div className="border-t bg-white py-3 px-6 text-xs text-slate-500 flex items-center gap-5 max-w-[1520px] mx-auto w-full">
-        <div>Decision Engine v1.0 — Weather • Soil • Salinity • Groundwater • Market • Rotation</div>
-        <div className="ml-auto">All recommendations include full reasoning + supporting evidence</div>
-      </div>
     </div>
   );
 }
