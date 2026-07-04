@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Satellite, Users, TrendingUp, Shield, Globe, Zap } from 'lucide-react';
 
@@ -112,15 +113,22 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="flex flex-col md:flex-row items-stretch justify-between gap-4">
             {[
               'Satellite Data', 'Validation', 'ML Prediction', 
               'Decision Intelligence', 'SMS Alerts'
-            ].map((step, idx) => (
-              <div key={idx} className="flex items-center gap-3 bg-slate-50 border border-slate-200 px-5 py-4 rounded-2xl">
-                <div className="w-7 h-7 flex-shrink-0 rounded-full bg-primary text-white text-xs flex items-center justify-center font-mono">{idx + 1}</div>
-                <div className="font-medium text-sm leading-tight">{step}</div>
-              </div>
+            ].map((step, idx, arr) => (
+              <React.Fragment key={idx}>
+                <div className="flex flex-col items-center gap-3 bg-slate-50 border border-slate-200 px-5 py-4 rounded-2xl flex-1 text-center">
+                  <div className="w-8 h-8 flex-shrink-0 rounded-full bg-emerald-100 text-emerald-700 text-sm flex items-center justify-center font-bold">{idx + 1}</div>
+                  <div className="font-semibold text-sm leading-tight">{step}</div>
+                </div>
+                {idx < arr.length - 1 && (
+                  <div className="hidden md:flex items-center justify-center text-slate-300">
+                    <ArrowRight className="w-5 h-5" />
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
         </div>

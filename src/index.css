@@ -70,7 +70,7 @@ body {
 }
 
 .pipeline-step {
-  @apply flex items-center gap-3 p-4 rounded-2xl transition-all border border-slate-200;
+  @apply flex flex-col items-center gap-3 p-4 rounded-2xl transition-all border border-slate-200 text-center flex-1;
 }
 
 .pipeline-step.active {

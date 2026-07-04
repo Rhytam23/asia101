@@ -35,7 +35,7 @@ export default function MissionControl() {
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 animate-fade-in">
         {/* Live Status */}
-        <Card className="xl:col-span-5 border-emerald-100 shadow-emerald-900/5">
+        <Card className="xl:col-span-12 border-emerald-100 shadow-emerald-900/5">
           <CardHeader className="flex flex-row items-center justify-between pb-2 border-none">
             <div>
               <CardTitle>Live Operations Status</CardTitle>
@@ -53,7 +53,7 @@ export default function MissionControl() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { label: 'Satellite Points', value: liveMetrics.points, icon: MapPin },
                 { label: 'Provinces Covered', value: liveMetrics.provinces, icon: Users },
@@ -81,7 +81,7 @@ export default function MissionControl() {
         </Card>
 
         {/* Pipeline Visualizer */}
-        <Card className="xl:col-span-7 bg-slate-50 overflow-hidden">
+        <Card className="xl:col-span-12 bg-slate-50 overflow-hidden">
           <PipelineVisualizer autoPlay={true} />
         </Card>
 
@@ -97,7 +97,10 @@ export default function MissionControl() {
                 <ArrowRight className="text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all" />
               </div>
               <h3 className="font-bold text-lg text-slate-900 tracking-tight">AI Decision Engine</h3>
-              <p className="text-sm text-slate-500 mt-1">Explainable recommendations with full confidence metrics.</p>
+              <div className="bg-emerald-50 text-emerald-700 p-3 rounded-xl mt-4">
+                <div className="text-2xl font-bold tracking-tight">94%</div>
+                <div className="text-xs font-semibold uppercase tracking-wider opacity-80 mt-0.5">Avg Confidence</div>
+              </div>
             </Card>
           </Link>
 
@@ -112,7 +115,10 @@ export default function MissionControl() {
                     <ArrowRight className="text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                   </div>
                   <h3 className="font-bold text-lg text-slate-900 tracking-tight">Interactive GIS Map</h3>
-                  <p className="text-sm text-slate-500 mt-1">Real-time layers, timeline, and province boundaries.</p>
+                  <div className="bg-blue-50 text-blue-700 p-3 rounded-xl mt-4">
+                    <div className="text-2xl font-bold tracking-tight">12</div>
+                    <div className="text-xs font-semibold uppercase tracking-wider opacity-80 mt-0.5">Active Provinces</div>
+                  </div>
                 </Card>
               </Link>
               <Link to="/historical">
@@ -124,7 +130,10 @@ export default function MissionControl() {
                     <ArrowRight className="text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                   </div>
                   <h3 className="font-bold text-lg text-slate-900 tracking-tight">Historical Replay</h3>
-                  <p className="text-sm text-slate-500 mt-1">2016 & 2020 Salinity Crisis Simulations.</p>
+                  <div className="bg-amber-50 text-amber-700 p-3 rounded-xl mt-4">
+                    <div className="text-2xl font-bold tracking-tight">2</div>
+                    <div className="text-xs font-semibold uppercase tracking-wider opacity-80 mt-0.5">Crisis Models</div>
+                  </div>
                 </Card>
               </Link>
             </>

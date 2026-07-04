@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Check, Clock, Play, Pause } from 'lucide-react';
+import { Check, Clock, Play, Pause, ArrowRight } from 'lucide-react';
 import { pipelineSteps } from '../data/mockData';
 
 interface PipelineVisualizerProps {
@@ -78,34 +78,40 @@ export default function PipelineVisualizer({ autoPlay = true, onComplete }: Pipe
         </div>
       </div>
 
-      <div className="space-y-2 mt-5">
+      <div className="flex flex-col md:flex-row items-stretch justify-between gap-4 mt-5 relative">
         {pipelineSteps.map((step, index) => {
           const isActive = index === currentStep && isPlaying;
           const isCompleted = completed.includes(index);
           
           return (
-            <div 
-              key={step.id} 
-              className={`pipeline-step ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
-            >
-              <div className="flex items-center justify-center w-8 h-8 rounded-2xl bg-white border border-slate-200 flex-shrink-0">
-                {isCompleted ? (
-                  <Check className="w-4 h-4 text-emerald-600" />
-                ) : isActive ? (
-                  <Clock className="w-4 h-4 text-emerald-600 animate-spin" />
-                ) : (
-                  <span className="text-[10px] text-slate-400 font-mono font-medium">{(index + 1).toString().padStart(2, '0')}</span>
+            <div key={step.id} className="flex flex-col md:flex-row items-center gap-4 flex-1">
+              <div 
+                className={`pipeline-step w-full ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
+              >
+                <div className="flex items-center justify-center w-8 h-8 rounded-2xl bg-white border border-slate-200 flex-shrink-0">
+                  {isCompleted ? (
+                    <Check className="w-4 h-4 text-emerald-600" />
+                  ) : isActive ? (
+                    <Clock className="w-4 h-4 text-emerald-600 animate-spin" />
+                  ) : (
+                    <span className="text-[10px] text-slate-400 font-mono font-medium">{(index + 1).toString().padStart(2, '0')}</span>
+                  )}
+                </div>
+                <div className="w-full">
+                  <div className="flex flex-col items-center">
+                    <div className="font-semibold text-sm text-center">{step.name}</div>
+                    <div className="text-[11px] text-slate-500 font-mono mt-1">{step.duration}ms</div>
+                  </div>
+                  <div className="text-xs text-slate-500 mt-2 text-center">{step.description}</div>
+                </div>
+                {step.dataSource && (
+                  <div className="mt-auto text-[10px] px-2 py-px bg-slate-100 rounded text-slate-600 uppercase tracking-wider">{step.dataSource}</div>
                 )}
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between">
-                  <div className="font-semibold text-sm">{step.name}</div>
-                  <div className="text-[11px] text-slate-500 font-mono">{step.duration}ms</div>
+              {index < pipelineSteps.length - 1 && (
+                <div className="hidden md:flex items-center justify-center text-slate-300">
+                  <ArrowRight className="w-5 h-5" />
                 </div>
-                <div className="text-xs text-slate-500">{step.description}</div>
-              </div>
-              {step.dataSource && (
-                <div className="text-xs px-2 py-px bg-slate-100 rounded text-slate-600">{step.dataSource}</div>
               )}
             </div>
           );
