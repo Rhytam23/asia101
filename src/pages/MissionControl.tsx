@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Activity, MapPin, TrendingUp, AlertTriangle, Users, Clock, ArrowRight } from 'lucide-react';
+import { Activity, MapPin, TrendingUp, AlertTriangle, Users, Clock, ArrowRight, Cloud, LineChart } from 'lucide-react';
 import PipelineVisualizer from '../components/PipelineVisualizer';
 import { currentSatelliteData, mockRecommendations, provinces } from '../data/mockData';
 import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '../components/ui';
@@ -135,6 +135,53 @@ export default function MissionControl() {
                   <div className="bg-amber-50 text-amber-700 p-3 rounded-xl mt-4">
                     <div className="text-2xl font-bold tracking-tight">2</div>
                     <div className="text-xs font-semibold uppercase tracking-wider opacity-80 mt-0.5">Crisis Models</div>
+                  </div>
+                </Card>
+              </Link>
+            </>
+          )}
+
+          {hasRole(['Farmer']) && (
+            <>
+              <Link to="/analytics">
+                <Card hoverEffect className="h-full border-slate-200 group cursor-pointer flex flex-col p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="p-3 bg-indigo-50 text-indigo-700 rounded-xl">
+                      <LineChart className="w-6 h-6" />
+                    </div>
+                    <ArrowRight className="text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <h3 className="font-bold text-lg text-slate-900 tracking-tight">Yield & Market Price</h3>
+                  <div className="bg-indigo-50 text-indigo-700 p-3 rounded-xl mt-4 flex justify-between items-end">
+                    <div>
+                      <div className="text-2xl font-bold tracking-tight">4.2<span className="text-sm">t/ha</span></div>
+                      <div className="text-xs font-semibold uppercase tracking-wider opacity-80 mt-0.5">Est. Yield</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl font-bold tracking-tight text-emerald-600">+$120/t</div>
+                      <div className="text-xs font-semibold uppercase tracking-wider opacity-80 mt-0.5 text-slate-600">Market Trend</div>
+                    </div>
+                  </div>
+                </Card>
+              </Link>
+              <Link to="/live-ops">
+                <Card hoverEffect className="h-full border-slate-200 group cursor-pointer flex flex-col p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="p-3 bg-sky-50 text-sky-700 rounded-xl">
+                      <Cloud className="w-6 h-6" />
+                    </div>
+                    <ArrowRight className="text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <h3 className="font-bold text-lg text-slate-900 tracking-tight">Local Weather</h3>
+                  <div className="bg-sky-50 text-sky-700 p-3 rounded-xl mt-4 flex justify-between items-end">
+                    <div>
+                      <div className="text-2xl font-bold tracking-tight">28°C</div>
+                      <div className="text-xs font-semibold uppercase tracking-wider opacity-80 mt-0.5">Partly Cloudy</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl font-bold tracking-tight text-blue-600">30%</div>
+                      <div className="text-xs font-semibold uppercase tracking-wider opacity-80 mt-0.5 text-slate-600">Rain Prob.</div>
+                    </div>
                   </div>
                 </Card>
               </Link>
