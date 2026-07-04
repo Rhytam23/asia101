@@ -81,9 +81,11 @@ export default function MissionControl() {
         </Card>
 
         {/* Pipeline Visualizer */}
-        <Card className="xl:col-span-12 bg-slate-50 overflow-hidden">
-          <PipelineVisualizer autoPlay={true} />
-        </Card>
+        {hasRole(['Government', 'Research']) && (
+          <Card className="xl:col-span-12 bg-slate-50 overflow-hidden">
+            <PipelineVisualizer autoPlay={true} />
+          </Card>
+        )}
 
         {/* Quick Links */}
         <div className="xl:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6">
