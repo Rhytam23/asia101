@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, Map, Activity, Brain, Clock, BarChart3, 
-  Menu, X, LogOut, Settings, TrendingUp
+  Menu, X, LogOut, Settings, TrendingUp, Users
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -11,7 +11,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout, hasRole } = useAuth();
+  const { user, logout, hasRole, switchRole } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -109,6 +109,23 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                       >
                         <Settings className="w-4 h-4" /> Account Settings
                       </Link>
+
+                      <div className="h-px bg-slate-100 my-1" />
+                      <div className="px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Switch Role</div>
+                      {(['Farmer', 'Cooperative', 'Government', 'Research'] as const).map(role => (
+                        <button
+                          key={role}
+                          onClick={() => {
+                            switchRole(role);
+                            setProfileDropdownOpen(false);
+                            navigate('/mission-control');
+                          }}
+                          className={`flex items-center gap-2 px-4 py-2 text-sm w-full text-left ${user.role === role ? 'text-emerald-700 bg-emerald-50' : 'text-slate-700 hover:bg-slate-50'}`}
+                        >
+                          <Users className="w-4 h-4" /> {role}
+                        </button>
+                      ))}
+
                       <div className="h-px bg-slate-100 my-1" />
                       <button 
                         onClick={handleLogout}

@@ -23,6 +23,7 @@ interface AuthContextType {
   logout: () => void;
   updatePreferences: (prefs: Partial<User['preferences']>) => void;
   hasRole: (allowedRoles: UserRole[]) => boolean;
+  switchRole: (role: UserRole) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -78,12 +79,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return allowedRoles.includes(user.role);
   };
 
+  const switchRole = (role: UserRole) => {
+    if (!user) return;
+    const updatedUser = { ...user, role };
+    setUser(updatedUser);
+    localStorage.setItem('mekong_auth_user', JSON.stringify(updatedUser));
+  };
+
   if (isLoading) {
     return null; // or a full-screen loading spinner
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout, updatePreferences, hasRole }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout, updatePreferences, hasRole, switchRole }}>
       {children}
     </AuthContext.Provider>
   );
