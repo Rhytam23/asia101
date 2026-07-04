@@ -10,6 +10,7 @@ import SmartMap from './pages/SmartMap';
 import AIDecisionEngine from './pages/AIDecisionEngine';
 import HistoricalReplay from './pages/HistoricalReplay';
 import ImpactAnalytics from './pages/ImpactAnalytics';
+import MarketIntelligence from './pages/MarketIntelligence';
 import RoleDashboards from './pages/RoleDashboards';
 import Layout from './layouts/MainLayout';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -46,6 +47,11 @@ function App() {
               <Route path="/profile" element={
                 <ProtectedRoute>
                   <Layout><Profile /></Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/market-intelligence" element={
+                <ProtectedRoute>
+                  <Layout><MarketIntelligence /></Layout>
                 </ProtectedRoute>
               } />
 

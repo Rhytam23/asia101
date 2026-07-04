@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, Map, Activity, Brain, Clock, BarChart3, 
-  Menu, X, LogOut, Settings 
+  Menu, X, LogOut, Settings, TrendingUp
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -24,6 +24,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const navItems = [
     { href: '/mission-control', label: 'Mission Control', icon: Home },
     { href: '/live-ops', label: 'Live Operations', icon: Activity },
+    { href: '/market-intelligence', label: 'Market Intelligence', icon: TrendingUp },
     { href: '/ai-engine', label: 'AI Engine', icon: Brain },
   ];
 

@@ -143,7 +143,7 @@ export default function MissionControl() {
 
           {hasRole(['Farmer']) && (
             <>
-              <Link to="/analytics">
+              <Link to="/market-intelligence">
                 <Card hoverEffect className="h-full border-slate-200 group cursor-pointer flex flex-col p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-3 bg-indigo-50 text-indigo-700 rounded-xl">
