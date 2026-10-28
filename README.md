@@ -255,3 +255,27 @@ Report vulnerabilities responsibly to the maintainers.
 ---
 
 **Last Updated**: 2026-07-03 (v1.0 Release)
+
+---
+
+## 📖 Project Understanding (Future Reference)
+
+The Mekong Smart Land System is a climate decision-intelligence platform for Vietnamese
+agriculture. It pulls real satellite (Sentinel-1/2, MODIS), weather (Open-Meteo) and soil
+(SoilGrids) data onto an interactive GIS map, then runs an explainable multi-factor scoring
+engine (salinity, water, market, weather, soil, satellite, history) to recommend crop, water and
+economic decisions — with a demo mode of five pre-built scenarios for a fast live pitch.
+
+**Stack:** React + TypeScript + Vite + Leaflet (frontend) · Python (`main.py`) API backend ·
+Docker/Vercel deployable.
+**Status:** the project's own README calls it a "Production-Ready Hackathon Prototype" — this is
+a hackathon build first, product-shaped second.
+
+## 🎯 Where This Can Be Used
+
+- Agri-tech / climate-resilience portfolio piece, or a base to pitch to NGOs/government agencies.
+- Reference implementation for "real satellite data + explainable scoring + role dashboards"
+  pattern, reusable on other geo-data problems.
+- **Hackathons:** yes — it was built for one. The demo-mode scenarios and role dashboards
+  (Farmer/Cooperative/Government/Researcher) are ready to reuse as a template for any future
+  climate/agri hackathon entry that needs a credible live demo in under 5 minutes.
