@@ -13,7 +13,7 @@ export function Button({
   children, 
   ...props 
 }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none rounded-xl active:scale-95';
+  const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100';
   
   const variants = {
     primary: 'bg-gradient-to-r from-primary to-emerald-800 text-white hover:shadow-md hover:from-emerald-800 hover:to-emerald-900 border border-transparent',

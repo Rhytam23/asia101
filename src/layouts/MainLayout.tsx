@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, Map, Activity, Brain, Clock, BarChart3, 
-  Menu, X, LogOut, Settings, TrendingUp, Users
+  Menu, X, LogOut, Settings, TrendingUp, Users, Check
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -13,7 +13,24 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const navigate = useNavigate();
   const { user, logout, hasRole, switchRole } = useAuth();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(`${path}/`);
+
+  // Close any open menu when the route changes or Escape is pressed
+  useEffect(() => {
+    setMobileOpen(false);
+    setProfileDropdownOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+        setProfileDropdownOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -39,8 +56,15 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAFAFA]">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-white focus:text-primary focus:font-semibold focus:px-4 focus:py-2 focus:rounded-xl focus:shadow-lg"
+      >
+        Skip to content
+      </a>
+
       {/* Top Navigation */}
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-200">
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link to="/mission-control" className="flex items-center gap-3">
@@ -54,14 +78,15 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-1 text-sm font-medium">
+            <nav aria-label="Primary" className="hidden lg:flex items-center gap-1 text-sm font-medium">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link
                     key={item.href}
                     to={item.href}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors whitespace-nowrap ${
                       isActive(item.href) 
                         ? 'bg-emerald-50 text-emerald-700' 
                         : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
@@ -81,6 +106,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               <div className="relative">
                 <button 
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  aria-haspopup="menu"
+                  aria-expanded={profileDropdownOpen}
+                  aria-label="Account menu"
                   className="flex items-center gap-2 p-1 pr-3 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors"
                 >
                   <div className="w-8 h-8 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-sm font-bold">
@@ -98,9 +126,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                       className="fixed inset-0 z-40" 
                       onClick={() => setProfileDropdownOpen(false)}
                     />
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-200 z-50 overflow-hidden py-1">
+                    <div role="menu" className="absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-200 z-50 overflow-hidden py-1 animate-scale-in origin-top-right">
                       <div className="px-4 py-3 border-b border-slate-100">
-                        <p className="text-sm text-slate-900 truncate">{user.email}</p>
+                        <p className="text-sm font-medium text-slate-900 truncate">{user.name}</p>
+                        <p className="text-xs text-slate-500 truncate">{user.email}</p>
                       </div>
                       <Link 
                         to="/profile" 
@@ -120,9 +149,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                             setProfileDropdownOpen(false);
                             navigate('/mission-control');
                           }}
-                          className={`flex items-center gap-2 px-4 py-2 text-sm w-full text-left ${user.role === role ? 'text-emerald-700 bg-emerald-50' : 'text-slate-700 hover:bg-slate-50'}`}
+                          role="menuitemradio"
+                          aria-checked={user.role === role}
+                          className={`flex items-center gap-2 px-4 py-2 text-sm w-full text-left ${user.role === role ? 'text-emerald-700 bg-emerald-50 font-medium' : 'text-slate-700 hover:bg-slate-50'}`}
                         >
                           <Users className="w-4 h-4" /> {role}
+                          {user.role === role && <Check className="w-4 h-4 ml-auto" />}
                         </button>
                       ))}
 
@@ -147,7 +179,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             )}
 
             <button 
-              onClick={() => setMobileOpen(!mobileOpen)} 
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'}
+              aria-expanded={mobileOpen}
               className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -157,7 +191,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="lg:hidden border-t border-slate-200 bg-white px-4 py-4 absolute w-full shadow-lg z-50">
+          <div className="lg:hidden border-t border-slate-200 bg-white px-4 py-4 absolute w-full shadow-lg z-50 max-h-[calc(100vh-4rem)] overflow-y-auto animate-fade-in">
             <div className="flex flex-col gap-1 text-sm font-medium">
               {navItems.map(item => {
                 const Icon = item.icon;
@@ -166,6 +200,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     key={item.href} 
                     to={item.href} 
                     onClick={() => setMobileOpen(false)}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
                       isActive(item.href) 
                         ? 'bg-emerald-50 text-emerald-700' 
@@ -181,9 +216,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         )}
       </header>
 
-      <main className="flex-1 w-full max-w-[1600px] mx-auto px-4 sm:px-6 py-8">
+      <main id="main" tabIndex={-1} className="flex-1 w-full max-w-[1600px] mx-auto px-4 sm:px-6 py-6 sm:py-8 focus:outline-none">
         {children}
       </main>
+
+      <footer className="border-t border-slate-200 bg-white">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-1 text-xs text-slate-500">
+          <span>© 2026 Mekong Smart Land System</span>
+          <span>Demonstration data is labeled where live APIs are unavailable</span>
+        </div>
+      </footer>
     </div>
   );
 }

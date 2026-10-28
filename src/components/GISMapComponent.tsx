@@ -70,6 +70,8 @@ export default function GISMapComponent({ data = currentSatelliteData, showTimel
       }, 1250);
     }
     return () => clearInterval(interval);
+    // timelineDates is a constant and showTimeline is read only to gate playback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying, timeIndex]);
 
   useEffect(() => {

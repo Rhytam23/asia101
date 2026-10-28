@@ -4,9 +4,11 @@ import PipelineVisualizer from '../components/PipelineVisualizer';
 import { currentSatelliteData, mockRecommendations, provinces } from '../data/mockData';
 import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
+import { format } from 'date-fns';
 
 export default function MissionControl() {
-  const { hasRole } = useAuth();
+  const { hasRole, user } = useAuth();
+  const today = format(new Date(), 'dd MMM yyyy').toUpperCase();
   
   const liveMetrics = {
     points: currentSatelliteData.length,
@@ -20,11 +22,13 @@ export default function MissionControl() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <div className="flex items-center gap-3 mb-2">
-            <Badge variant="emerald">LIVE • 03 JUL 2026</Badge>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900">Mission Control</h1>
+          <div className="flex flex-wrap items-center gap-3 mb-2">
+            <Badge variant="emerald">LIVE • {today}</Badge>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Mission Control</h1>
           </div>
-          <p className="text-slate-500">Real-time satellite data ingestion & decision pipeline</p>
+          <p className="text-slate-500">
+            {user ? `Welcome back, ${user.name.split(' ').slice(-1)[0]}. ` : ''}Real-time satellite data ingestion & decision pipeline
+          </p>
         </div>
         <Link to="/live-ops">
           <Button variant="outline" className="gap-2">

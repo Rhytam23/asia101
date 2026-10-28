@@ -338,14 +338,15 @@ export default function ProfessionalGISMap({ onLocationSelect, selectedLocation,
       </MapContainer>
 
       {/* BASE LAYER SWITCHER — Professional control */}
-      <div className="absolute top-4 right-4 z-[999] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-2xl shadow p-1.5 text-sm">
+      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-[999] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-2xl shadow p-1.5 text-sm">
         <div className="px-2 pb-1 text-[10px] font-semibold text-slate-500 tracking-widest">BASE MAP</div>
         <div className="flex flex-col">
           {BASE_LAYERS.map((layer) => (
             <button
               key={layer.id}
               onClick={() => setActiveBase(layer.id)}
-              className={`px-4 py-[5px] text-left rounded-xl text-xs font-medium transition ${activeBase === layer.id ? 'bg-primary text-white' : 'hover:bg-slate-100'}`}
+              aria-pressed={activeBase === layer.id}
+              className={`px-3 sm:px-4 py-1.5 text-left rounded-xl text-xs font-medium transition ${activeBase === layer.id ? 'bg-primary text-white' : 'hover:bg-slate-100'}`}
             >
               {layer.name}
             </button>
@@ -354,7 +355,7 @@ export default function ProfessionalGISMap({ onLocationSelect, selectedLocation,
       </div>
 
       {/* Layer toggles */}
-      <div className="absolute top-4 left-4 z-[999] bg-white/95 backdrop-blur border border-slate-200 rounded-2xl shadow p-3 text-xs w-[168px]">
+      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[999] bg-white/95 backdrop-blur border border-slate-200 rounded-2xl shadow p-3 text-xs w-[150px] sm:w-[168px]">
         <div className="font-semibold text-emerald-800 mb-1.5 px-1 tracking-wider text-xs">GIS LAYERS</div>
         
         <label className="flex items-center gap-2 py-1 cursor-pointer px-1">
@@ -376,7 +377,7 @@ export default function ProfessionalGISMap({ onLocationSelect, selectedLocation,
       </div>
 
       {/* Legend */}
-      <div className="absolute bottom-4 right-4 z-[999] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-2xl p-3 text-xs shadow-sm w-[158px]">
+      <div className="hidden sm:block absolute bottom-16 right-4 z-[999] bg-white/95 backdrop-blur-sm border border-slate-200 rounded-2xl p-3 text-xs shadow-sm w-[158px]">
         <div className="font-semibold text-emerald-800 text-[10px] mb-1.5">LEGEND</div>
         <div className="space-y-1 text-[10px]">
           <div className="flex items-center gap-2"><div className="w-3 h-3 rounded bg-red-600"></div> High Salinity (&gt;7)</div>
@@ -387,7 +388,7 @@ export default function ProfessionalGISMap({ onLocationSelect, selectedLocation,
       </div>
 
       {/* Status bar */}
-      <div className="absolute bottom-3 left-3 bg-white/95 text-[10px] px-3 py-px rounded-xl border border-slate-200 text-slate-500 z-[999]">
+      <div className="hidden sm:block absolute bottom-3 left-3 bg-white/95 text-[10px] px-3 py-1 rounded-xl border border-slate-200 text-slate-500 z-[999]">
         Vietnam • Mekong Delta • Leaflet
       </div>
     </div>

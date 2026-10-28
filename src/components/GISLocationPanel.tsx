@@ -22,7 +22,7 @@ function MetaBadge({ source, lastUpdated, confidence }: { source: string; lastUp
   const date = new Date(lastUpdated);
   const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   return (
-    <div className="text-[10px] flex items-center gap-2 text-slate-500 mt-1">
+    <div className="text-[10px] flex flex-wrap items-center gap-x-2 text-slate-500 mt-1">
       <span>{source}</span>
       <span>•</span>
       <span>Updated {time}</span>
@@ -38,7 +38,7 @@ export default function GISLocationPanel({
 
   if (loading) {
     return (
-      <div className="card h-full flex items-center justify-center p-8">
+      <div className="card h-full min-h-[240px] flex items-center justify-center p-8" role="status" aria-live="polite">
         <div className="flex flex-col items-center gap-3 text-emerald-700">
           <div className="animate-spin w-6 h-6 border-2 border-emerald-600 border-t-transparent rounded-full"></div>
           <div className="text-sm font-medium">Fetching live data for location...</div>
@@ -49,8 +49,10 @@ export default function GISLocationPanel({
 
   if (!admin && !weather) {
     return (
-      <div className="card h-full flex items-center justify-center p-8 text-center text-sm text-slate-500">
-        Click anywhere on the map or search to fetch real data for that location.
+      <div className="card h-full min-h-[240px] flex flex-col items-center justify-center gap-3 p-8 text-center text-sm text-slate-500">
+        <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl" aria-hidden>📍</div>
+        <div className="font-medium text-slate-700">No location selected</div>
+        <div>Click anywhere on the map or search to load weather, soil, market and policy data.</div>
       </div>
     );
   }
@@ -191,10 +193,10 @@ export default function GISLocationPanel({
       </div>
 
       <div className="border-t px-4 py-3.5 flex gap-2 bg-white">
-        <button onClick={() => onApply?.('recommend')} className="flex-1 py-2.5 bg-primary text-white text-sm font-semibold rounded-2xl">
+        <button onClick={() => onApply?.('recommend')} className="flex-1 py-2.5 bg-primary hover:bg-emerald-800 text-white text-xs sm:text-sm font-semibold rounded-2xl transition-colors">
           GET CROP RECOMMENDATIONS
         </button>
-        <button onClick={() => onApply?.('sms')} className="flex-1 py-2.5 border text-sm font-semibold rounded-2xl">
+        <button onClick={() => onApply?.('sms')} className="flex-1 py-2.5 border hover:bg-slate-50 text-xs sm:text-sm font-semibold rounded-2xl transition-colors">
           DISPATCH SMS
         </button>
       </div>

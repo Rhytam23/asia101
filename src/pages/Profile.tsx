@@ -83,11 +83,12 @@ export default function Profile() {
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input 
                     type="checkbox" 
-                    className="sr-only peer" 
+                    className="sr-only peer"
+                    aria-label="Email notifications"
                     checked={user.preferences.notifications}
                     onChange={(e) => updatePreferences({ notifications: e.target.checked })}
                   />
-                  <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  <div className="w-11 h-6 bg-slate-200 peer-focus-visible:ring-2 peer-focus-visible:ring-emerald-500/40 peer-focus-visible:ring-offset-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
 
@@ -103,14 +104,15 @@ export default function Profile() {
                     <div className="text-sm text-slate-500">Select your visual preference</div>
                   </div>
                 </div>
-                <select 
-                  className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5"
+                <select
+                  aria-label="Interface theme"
+                  className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500/30 focus:border-primary block p-2.5"
                   value={user.preferences.theme}
                   onChange={(e) => updatePreferences({ theme: e.target.value as any })}
                 >
                   <option value="light">Light</option>
-                  <option value="dark">Dark</option>
-                  <option value="system">System</option>
+                  <option value="dark" disabled>Dark (coming soon)</option>
+                  <option value="system" disabled>System (coming soon)</option>
                 </select>
               </div>
 
@@ -126,8 +128,9 @@ export default function Profile() {
                     <div className="text-sm text-slate-500">Regional localization</div>
                   </div>
                 </div>
-                <select 
-                  className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5"
+                <select
+                  aria-label="Language"
+                  className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500/30 focus:border-primary block p-2.5"
                   value={user.preferences.language}
                   onChange={(e) => updatePreferences({ language: e.target.value as any })}
                 >

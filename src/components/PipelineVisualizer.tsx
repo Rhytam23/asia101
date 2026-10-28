@@ -32,6 +32,8 @@ export default function PipelineVisualizer({ autoPlay = true, onComplete }: Pipe
     }
 
     return () => clearTimeout(interval);
+    // onComplete is intentionally excluded so a new callback doesn't restart the step timer
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying, currentStep]);
 
   const togglePlay = () => {

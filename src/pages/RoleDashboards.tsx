@@ -23,18 +23,20 @@ export default function RoleDashboards() {
     ResearchDashboard;
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="bg-slate-50 -mx-4 sm:-mx-6 -my-6 sm:-my-8 min-h-[calc(100vh-4rem)]">
       {/* Persistent Role Switcher — instant client-side, no reload */}
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b">
-        <div className="max-w-6xl mx-auto px-6 py-3 flex items-center gap-2">
-          <div className="font-semibold text-lg tracking-tight mr-4">Role Dashboards</div>
+      <div className="sticky top-16 z-30 bg-white/95 backdrop-blur border-b">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+          <h1 className="font-semibold text-lg tracking-tight">Role Dashboards</h1>
           
-          <div className="flex bg-slate-100 rounded-2xl p-1 text-sm">
+          <div role="tablist" aria-label="Dashboard role" className="flex bg-slate-100 rounded-2xl p-1 text-sm max-w-full overflow-x-auto">
             {ROLES.map((role) => (
               <button
                 key={role.id}
+                role="tab"
+                aria-selected={activeRole === role.id}
                 onClick={() => setActiveRole(role.id)}
-                className={`px-6 py-1.5 rounded-[14px] font-medium transition-all ${
+                className={`px-4 sm:px-6 py-1.5 rounded-[14px] font-medium transition-all whitespace-nowrap ${
                   activeRole === role.id 
                     ? 'bg-white shadow-sm text-emerald-800' 
                     : 'text-slate-600 hover:text-slate-900'
@@ -52,7 +54,7 @@ export default function RoleDashboards() {
       </div>
 
       {/* Selected role renders here — zero page reload */}
-      <div>
+      <div role="tabpanel">
         <CurrentComponent />
       </div>
     </div>

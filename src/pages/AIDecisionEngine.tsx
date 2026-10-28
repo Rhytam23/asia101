@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { mockRecommendations } from '../data/mockData';
 import { Recommendation } from '../types';
 import { CheckCircle, TrendingUp, ArrowRight } from 'lucide-react';
@@ -8,6 +9,7 @@ import { Card, CardContent, Button, Badge } from '../components/ui';
 
 export default function AIDecisionEngine() {
   const demo = useDemoMode();
+  const navigate = useNavigate();
 
   // When demo mode is active, use scenario recommendations
   const baseRecs: Recommendation[] = (demo.isDemoMode && demo.demoData) 
@@ -31,6 +33,15 @@ export default function AIDecisionEngine() {
   const [recommendations, setRecommendations] = useState(baseRecs);
   const [selectedRec, setSelectedRec] = useState<Recommendation | null>(baseRecs[0]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [appliedIds, setAppliedIds] = useState<string[]>([]);
+
+  // Re-sync when the demo scenario changes
+  useEffect(() => {
+    setRecommendations(baseRecs);
+    setSelectedRec(baseRecs[0]);
+    setAppliedIds([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [demo.isDemoMode, demo.currentScenario]);
 
   const regenerateRecommendations = () => {
     setIsGenerating(true);
@@ -53,18 +64,22 @@ export default function AIDecisionEngine() {
   };
 
   const applyRecommendation = (rec: Recommendation) => {
+    if (appliedIds.includes(rec.id)) {
+      toast.info('Already applied', { description: rec.title });
+      return;
+    }
     toast.success(`Recommendation applied: ${rec.title}`, {
       description: `Action queued. SMS will be sent to registered farmers.`,
       duration: 4000,
     });
-    setRecommendations(prev => prev.map(r => r.id === rec.id ? { ...r, title: '✓ ' + r.title } : r));
+    setAppliedIds(prev => (prev.includes(rec.id) ? prev : [...prev, rec.id]));
   };
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 mb-2">AI Decision Engine</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 mb-2">AI Decision Engine</h1>
           <p className="text-slate-500">Explainable multi-objective recommendations</p>
         </div>
         <Button 
@@ -73,8 +88,8 @@ export default function AIDecisionEngine() {
           disabled={isGenerating}
           className="gap-2"
         >
-          {isGenerating ? 'REGENERATING...' : 'REGENERATE RECOMMENDATIONS'} 
-          <TrendingUp className="w-4 h-4" />
+          {isGenerating ? 'Regenerating…' : 'Regenerate recommendations'}
+          <TrendingUp className={`w-4 h-4 ${isGenerating ? 'animate-pulse' : ''}`} />
         </Button>
       </div>
 
@@ -90,12 +105,24 @@ export default function AIDecisionEngine() {
               <Card 
                 key={rec.id}
                 hoverEffect
+                role="button"
+                tabIndex={0}
+                aria-pressed={selectedRec?.id === rec.id}
                 onClick={() => setSelectedRec(rec)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedRec(rec);
+                  }
+                }}
                 className={`cursor-pointer transition-all ${selectedRec?.id === rec.id ? 'border-primary ring-1 ring-primary/20 bg-emerald-50/20' : 'hover:border-slate-300'}`}
               >
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-bold text-slate-900 pr-4 leading-tight">{rec.title}</h3>
+                    <h3 className="font-bold text-slate-900 pr-4 leading-tight">
+                      {appliedIds.includes(rec.id) && <CheckCircle className="inline w-4 h-4 text-primary mr-1 -mt-0.5" aria-label="Applied" />}
+                      {rec.title}
+                    </h3>
                     <Badge variant={rec.confidence >= 90 ? 'emerald' : 'amber'}>{rec.confidence}%</Badge>
                   </div>
 
@@ -128,13 +155,13 @@ export default function AIDecisionEngine() {
         <div className="xl:col-span-7">
           {selectedRec && (
             <Card className="h-full">
-              <CardContent className="p-8">
-                <div className="flex justify-between items-start mb-8">
+              <CardContent className="p-5 sm:p-8">
+                <div className="flex flex-col sm:flex-row sm:justify-between items-start gap-3 mb-8">
                   <div>
                     <div className="uppercase text-xs font-bold text-primary tracking-widest mb-2">EXPLAINABLE RECOMMENDATION</div>
                     <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 leading-tight pr-6">{selectedRec.title}</h2>
                   </div>
-                  <div className="text-right shrink-0">
+                  <div className="sm:text-right shrink-0">
                     <Badge variant="emerald" className="mb-1">{selectedRec.confidence}% CONFIDENCE</Badge>
                     <div className="text-xs font-semibold text-red-600">{selectedRec.uncertainty}% uncertainty</div>
                   </div>
@@ -189,14 +216,14 @@ export default function AIDecisionEngine() {
                     onClick={() => applyRecommendation(selectedRec)}
                     className="w-full sm:w-auto flex-1 gap-2 py-3"
                   >
-                    APPLY RECOMMENDATION <ArrowRight className="w-4 h-4" />
+                    {appliedIds.includes(selectedRec.id) ? 'Applied' : 'Apply recommendation'} <ArrowRight className="w-4 h-4" />
                   </Button>
                   <Button 
                     variant="outline"
-                    onClick={() => window.location.href = '/live-ops'} 
+                    onClick={() => navigate('/live-ops')}
                     className="w-full sm:w-auto flex-1 py-3"
                   >
-                    PREVIEW SMS ALERT
+                    Preview SMS alert
                   </Button>
                 </div>
 

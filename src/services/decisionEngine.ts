@@ -389,7 +389,7 @@ export function generateRecommendations(input: DecisionInput): CropRecommendatio
     );
 
     // Expected yield (base + adjustments)
-    let baseYield = crop.includes('Rice') ? 5.8 : crop.includes('Shrimp') ? 6.4 : crop.includes('Vegetable') ? 17.5 : 11.2;
+    const baseYield = crop.includes('Rice') ? 5.8 : crop.includes('Shrimp') ? 6.4 : crop.includes('Vegetable') ? 17.5 : 11.2;
     const yieldAdj = (salinityTol - 70) / 35 + (waterEff - 70) / 50;
     const expectedYield = Math.max(2.5, parseFloat((baseYield + yieldAdj).toFixed(1)));
 

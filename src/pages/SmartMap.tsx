@@ -29,7 +29,7 @@ export default function SmartMap() {
   const realLocationData = useLocationData(effectiveLat, effectiveLng);
 
   // When demo mode is active, completely override with scenario data
-  const locationData = demo.isDemoMode && demo.demoData 
+  const locationData = useMemo(() => demo.isDemoMode && demo.demoData 
     ? {
         ...realLocationData,
         admin: demo.demoData.admin,
@@ -41,7 +41,7 @@ export default function SmartMap() {
         loading: false,
         error: null,
       }
-    : realLocationData;
+    : realLocationData, [demo.isDemoMode, demo.demoData, realLocationData]);
 
   // Memoized decision input for performance (no unnecessary state churn)
   const decisionInput: DecisionInput | null = useMemo(() => {
@@ -160,6 +160,8 @@ export default function SmartMap() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              type="search"
+              aria-label="Search location"
               placeholder="Search province, district, commune or lat,lng"
               className="w-full bg-slate-50 border border-slate-200 pl-11 pr-24 py-3 text-sm rounded-xl focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
             />
@@ -174,7 +176,7 @@ export default function SmartMap() {
             </Button>
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0 justify-end">
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
             <Button variant="outline" size="sm" onClick={resetMap} className="gap-2 h-10">
               <RefreshCw className="w-4 h-4" /> Reset Map
             </Button>
@@ -209,7 +211,7 @@ export default function SmartMap() {
                 loading={locationData.loading}
                 onApply={(action) => {
                   if (action === 'recommend' && recommendations.length) {
-                    window.scrollTo({ top: 900, behavior: 'smooth' });
+                    document.getElementById('decision-intelligence')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   } else {
                     toast(demo.isDemoMode ? 'DEMO: SMS alert would be sent' : 'SMS alert dispatched');
                   }
@@ -221,7 +223,7 @@ export default function SmartMap() {
       </div>
 
       {/* Decision Intelligence Engine Section */}
-      <div className="pt-8 pb-8">
+      <div id="decision-intelligence" className="pt-8 pb-8 scroll-mt-20">
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
           <DecisionIntelligence 
             recommendations={recommendations} 

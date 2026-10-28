@@ -163,19 +163,23 @@ export default function LiveOperations() {
                 <input 
                   value={newAlert.recipient}
                   onChange={(e) => setNewAlert({...newAlert, recipient: e.target.value})}
-                  className="w-full bg-slate-50 border border-slate-200 focus:ring-primary focus:border-primary rounded-xl px-4 py-2.5 text-sm outline-none transition-all" 
+                  className="w-full bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-emerald-500/30 focus:border-primary rounded-xl px-4 py-2.5 text-sm outline-none transition-all"
+                  aria-label="Recipient name"
                   placeholder="Recipient name" 
                 />
                 <input 
                   value={newAlert.phone}
                   onChange={(e) => setNewAlert({...newAlert, phone: e.target.value})}
-                  className="w-full bg-slate-50 border border-slate-200 focus:ring-primary focus:border-primary rounded-xl px-4 py-2.5 text-sm outline-none transition-all" 
+                  className="w-full bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-emerald-500/30 focus:border-primary rounded-xl px-4 py-2.5 text-sm outline-none transition-all"
+                  aria-label="Phone number"
+                  type="tel"
                   placeholder="+84 9xx xxx xxx" 
                 />
                 <textarea 
                   value={newAlert.message}
                   onChange={(e) => setNewAlert({...newAlert, message: e.target.value})}
-                  className="w-full bg-slate-50 border border-slate-200 focus:ring-primary focus:border-primary rounded-xl px-4 py-2.5 text-sm h-24 resize-y outline-none transition-all" 
+                  className="w-full bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-emerald-500/30 focus:border-primary rounded-xl px-4 py-2.5 text-sm h-24 resize-y outline-none transition-all"
+                  aria-label="Alert message"
                   placeholder="Custom alert text (optional)" 
                 />
                 <Button 

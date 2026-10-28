@@ -1,21 +1,33 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/shared/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
-import SignUp from './pages/SignUp';
-import Profile from './pages/Profile';
-import MissionControl from './pages/MissionControl';
-import LiveOperations from './pages/LiveOperations';
-import SmartMap from './pages/SmartMap';
-import AIDecisionEngine from './pages/AIDecisionEngine';
-import HistoricalReplay from './pages/HistoricalReplay';
-import ImpactAnalytics from './pages/ImpactAnalytics';
-import MarketIntelligence from './pages/MarketIntelligence';
-import RoleDashboards from './pages/RoleDashboards';
+const SignUp = lazy(() => import('./pages/SignUp'));
+const Profile = lazy(() => import('./pages/Profile'));
+const MissionControl = lazy(() => import('./pages/MissionControl'));
+const LiveOperations = lazy(() => import('./pages/LiveOperations'));
+const SmartMap = lazy(() => import('./pages/SmartMap'));
+const AIDecisionEngine = lazy(() => import('./pages/AIDecisionEngine'));
+const HistoricalReplay = lazy(() => import('./pages/HistoricalReplay'));
+const ImpactAnalytics = lazy(() => import('./pages/ImpactAnalytics'));
+const MarketIntelligence = lazy(() => import('./pages/MarketIntelligence'));
+const RoleDashboards = lazy(() => import('./pages/RoleDashboards'));
 import Layout from './layouts/MainLayout';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { DemoModeProvider } from './context/DemoModeContext';
 import DemoModeSelector from './components/DemoModeSelector';
+
+function PageLoader() {
+  return (
+    <div className="min-h-screen flex items-center justify-center" role="status" aria-live="polite">
+      <div className="flex flex-col items-center gap-3 text-emerald-700">
+        <div className="animate-spin w-7 h-7 border-2 border-emerald-600 border-t-transparent rounded-full" />
+        <span className="text-sm font-medium">Loading…</span>
+      </div>
+    </div>
+  );
+}
 
 function App() {
   return (
@@ -23,6 +35,7 @@ function App() {
       <ErrorBoundary>
         <AuthProvider>
           <DemoModeProvider>
+            <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<LandingPage />} />
@@ -81,6 +94,7 @@ function App() {
 
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            </Suspense>
             
             {/* Global Demo Mode UI */}
             <DemoModeSelector />
